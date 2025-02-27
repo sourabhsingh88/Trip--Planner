@@ -1,0 +1,4 @@
+spring:
+  name: booking-service 
+  profiles:
+    active: local

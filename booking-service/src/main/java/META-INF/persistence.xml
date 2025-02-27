@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.0" xmlns="https://jakarta.ee/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+	<persistence-unit name="booking-service">
+		<class>com.amstech.tripplanner.booking.entity.AboutUs</class>
+		<class>com.amstech.tripplanner.booking.entity.Accommodation</class>
+		<class>com.amstech.tripplanner.booking.entity.Activity</class>
+		<class>com.amstech.tripplanner.booking.entity.Booking</class>
+		<class>com.amstech.tripplanner.booking.entity.City</class>
+		<class>com.amstech.tripplanner.booking.entity.ContactUs</class>
+		<class>com.amstech.tripplanner.booking.entity.EmailOtp</class>
+		<class>com.amstech.tripplanner.booking.entity.Feedback</class>
+		<class>com.amstech.tripplanner.booking.entity.Location</class>
+		<class>com.amstech.tripplanner.booking.entity.Meal</class>
+		<class>com.amstech.tripplanner.booking.entity.MobileOtp</class>
+		<class>com.amstech.tripplanner.booking.entity.Notification</class>
+		<class>com.amstech.tripplanner.booking.entity.Role</class>
+		<class>com.amstech.tripplanner.booking.entity.State</class>
+		<class>com.amstech.tripplanner.booking.entity.Status</class>
+		<class>com.amstech.tripplanner.booking.entity.Transport</class>
+		<class>com.amstech.tripplanner.booking.entity.Trip</class>
+		<class>com.amstech.tripplanner.booking.entity.TripBanner</class>
+		<class>com.amstech.tripplanner.booking.entity.TripPlanner</class>
+		<class>com.amstech.tripplanner.booking.entity.User</class>
+		<class>com.amstech.tripplanner.booking.entity.UserRole</class>
+	</persistence-unit>
+</persistence>

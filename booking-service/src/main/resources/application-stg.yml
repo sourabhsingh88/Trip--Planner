@@ -1,0 +1,31 @@
+spring:
+  name: booking-service-stg
+  datasource:
+    platform: mysql
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://localhost:3306/tripplanner
+    username: root
+    password: Sawan@2144
+    driver-class: com.mysql.cj.jdbc.Driver
+    hikari:
+      minimumIdle: 5
+      maximumIdle: 20
+      idleTimeout: 2000
+      connectionTimeout: 2000
+      poolName: booking-service-pool-stg
+      maxLifetime: 30000
+    jpa:
+      hibernate:
+       ddl-auto: update
+      genrate-ddl: false
+      show-sql: false
+      show_sql: true
+      properties:
+        hibernate:
+          show-sql: false
+          format_sql: true
+          dialect: org.hibernate.dialect.MySQL8Dialect
+server:
+  servlet:
+    context-path: /booking-service-api-stg
+  port: 4002
