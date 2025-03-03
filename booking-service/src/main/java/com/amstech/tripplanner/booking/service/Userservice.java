@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.amstech.tripplanner.booking.entity.Location;
 import com.amstech.tripplanner.booking.entity.User;
 import com.amstech.tripplanner.booking.entity.UserRole;
+import com.amstech.tripplanner.booking.modal.request.*;
 import com.amstech.tripplanner.booking.repo.LocationRepo;
 import com.amstech.tripplanner.booking.repo.UserRepo;
-import com.amstech.tripplanner.booking.reques.*;
 
 @Service
 public class Userservice {
