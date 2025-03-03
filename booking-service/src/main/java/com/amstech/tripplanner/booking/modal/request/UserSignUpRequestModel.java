@@ -3,7 +3,7 @@ package com.amstech.tripplanner.booking.modal.request;
 import java.util.Date;
 
 public class UserSignUpRequestModel {
-private int id;
+
 private int locationId;
 private String name;
 private String email;
@@ -18,12 +18,6 @@ public void setDob(Date dob) {
 	this.dob = dob;
 }
 
-public int getId() {
-	return id;
-}
-public void setId(int id) {
-	this.id = id;
-}
 public int getLocationId() {
 	return locationId;
 }

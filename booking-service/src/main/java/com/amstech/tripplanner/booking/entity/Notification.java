@@ -2,7 +2,7 @@ package com.amstech.tripplanner.booking.entity;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
-import java.util.Date;
+import java.sql.Timestamp;
 
 
 /**
@@ -18,10 +18,10 @@ public class Notification implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_at")
-	private Date createdAt;
+	private Timestamp createdAt;
 
+	@Lob
 	private String message;
 
 	private String title;
@@ -30,14 +30,19 @@ public class Notification implements Serializable {
 	@ManyToOne
 	private Status status;
 
-	//bi-directional many-to-one association to TripPlanner
+	//bi-directional many-to-one association to Trip
 	@ManyToOne
-	@JoinColumn(name="trip_planner_id")
-	private TripPlanner tripPlanner;
+	private Trip trip;
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
-	private User user;
+	@JoinColumn(name="sender_id")
+	private User sender;
+
+	//bi-directional many-to-one association to User
+	@ManyToOne
+	@JoinColumn(name="receiver_id")
+	private User receiver;
 
 	public Notification() {
 	}
@@ -50,11 +55,11 @@ public class Notification implements Serializable {
 		this.id = id;
 	}
 
-	public Date getCreatedAt() {
+	public Timestamp getCreatedAt() {
 		return this.createdAt;
 	}
 
-	public void setCreatedAt(Date createdAt) {
+	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
 	}
 
@@ -82,20 +87,32 @@ public class Notification implements Serializable {
 		this.status = status;
 	}
 
-	public TripPlanner getTripPlanner() {
-		return this.tripPlanner;
+	public Trip getTrip() {
+		return this.trip;
 	}
 
-	public void setTripPlanner(TripPlanner tripPlanner) {
-		this.tripPlanner = tripPlanner;
+	public void setTrip(Trip trip) {
+		this.trip = trip;
 	}
 
-	public User getUser() {
-		return this.user;
+	public User getSender() {
+		return sender;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setSender(User sender) {
+		this.sender = sender;
 	}
+
+	public User getReceiver() {
+		return receiver;
+	}
+
+	public void setReceiver(User receiver) {
+		this.receiver = receiver;
+	}
+
+	
+
+	
 
 }

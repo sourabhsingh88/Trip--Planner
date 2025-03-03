@@ -27,8 +27,8 @@ public class UserController {
 	public UserController() {
 		LOGGER.info("User Controller : object Created ");
 
+		
 	}
-
 	@RequestMapping(method = RequestMethod.POST, value = "/signUp", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Object> singup(@RequestBody UserSignUpRequestModel userSignUpRequestModel) {
 
@@ -46,6 +46,7 @@ public class UserController {
 	public ResponseEntity<Object> update(@RequestBody UserUpdateRequestModel1 userUpdateRequestModel1) {
 
 		LOGGER.info("updating user detail with id: {} ", userUpdateRequestModel1.getId());
+
 		try {
 			userservice.update(userUpdateRequestModel1);
 			return new ResponseEntity<Object>("Update success", HttpStatus.OK);
@@ -65,6 +66,7 @@ public class UserController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<Object>("failed to delete user due to " + e.getMessage(),
+
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
