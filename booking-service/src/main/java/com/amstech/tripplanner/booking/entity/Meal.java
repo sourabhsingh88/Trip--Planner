@@ -1,6 +1,9 @@
 package com.amstech.tripplanner.booking.entity;
 
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 
@@ -24,6 +27,7 @@ public class Meal implements Serializable {
 
 	//bi-directional many-to-one association to Trip
 	@ManyToOne
+	@JsonIgnore
 	private Trip trip;
 
 	public Meal() {
