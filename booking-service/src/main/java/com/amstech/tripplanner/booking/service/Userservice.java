@@ -2,22 +2,29 @@ package com.amstech.tripplanner.booking.service;
 
 import java.util.Date;
 
+
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.amstech.tripplanner.booking.controller.UserController;
 import com.amstech.tripplanner.booking.entity.Location;
 import com.amstech.tripplanner.booking.entity.User;
 import com.amstech.tripplanner.booking.entity.UserRole;
+import com.amstech.tripplanner.booking.modal.request.*;
 import com.amstech.tripplanner.booking.repo.LocationRepo;
 import com.amstech.tripplanner.booking.repo.UserRepo;
-import com.amstech.tripplanner.booking.reques.*;
 
 @Service
 public class Userservice {
+	
+	private Logger LOGGER = LoggerFactory.getLogger(Userservice.class);
+	
 	@Autowired
 	private UserRepo userRepo;
 
