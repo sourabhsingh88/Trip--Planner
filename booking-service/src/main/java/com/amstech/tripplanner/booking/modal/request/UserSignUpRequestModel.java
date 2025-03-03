@@ -1,4 +1,4 @@
-package com.amstech.tripplanner.booking.reques;
+package com.amstech.tripplanner.booking.modal.request;
 
 import java.util.Date;
 

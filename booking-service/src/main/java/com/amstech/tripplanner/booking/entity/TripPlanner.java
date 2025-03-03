@@ -36,10 +36,6 @@ public class TripPlanner implements Serializable {
 	@Column(name="updated_at")
 	private Date updatedAt;
 
-	//bi-directional many-to-one association to Notification
-	@OneToMany(mappedBy="tripPlanner")
-	private List<Notification> notifications;
-
 	//bi-directional many-to-one association to Trip
 	@OneToMany(mappedBy="tripPlanner")
 	private List<Trip> trips;
@@ -101,28 +97,6 @@ public class TripPlanner implements Serializable {
 
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
-	}
-
-	public List<Notification> getNotifications() {
-		return this.notifications;
-	}
-
-	public void setNotifications(List<Notification> notifications) {
-		this.notifications = notifications;
-	}
-
-	public Notification addNotification(Notification notification) {
-		getNotifications().add(notification);
-		notification.setTripPlanner(this);
-
-		return notification;
-	}
-
-	public Notification removeNotification(Notification notification) {
-		getNotifications().remove(notification);
-		notification.setTripPlanner(null);
-
-		return notification;
 	}
 
 	public List<Trip> getTrips() {
