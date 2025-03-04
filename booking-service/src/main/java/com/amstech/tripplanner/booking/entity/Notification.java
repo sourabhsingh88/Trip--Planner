@@ -2,7 +2,7 @@ package com.amstech.tripplanner.booking.entity;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
-import java.util.Date;
+import java.sql.Timestamp;
 
 
 /**
@@ -18,26 +18,31 @@ public class Notification implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_at")
-	private Date createdAt;
+	private Timestamp createdAt;
 
+	@Lob
 	private String message;
 
 	private String title;
 
-	//bi-directional many-to-one association to Status
+	//bi-directional many-to-one association to User
 	@ManyToOne
-	private Status status;
-
-	//bi-directional many-to-one association to TripPlanner
-	@ManyToOne
-	@JoinColumn(name="trip_planner_id")
-	private TripPlanner tripPlanner;
+	@JoinColumn(name="sender_id")
+	private User user1;
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
-	private User user;
+	@JoinColumn(name="receiver_id")
+	private User user2;
+
+	//bi-directional many-to-one association to Trip
+	@ManyToOne
+	private Trip trip;
+
+	//bi-directional many-to-one association to Status
+	@ManyToOne
+	private Status status;
 
 	public Notification() {
 	}
@@ -50,11 +55,11 @@ public class Notification implements Serializable {
 		this.id = id;
 	}
 
-	public Date getCreatedAt() {
+	public Timestamp getCreatedAt() {
 		return this.createdAt;
 	}
 
-	public void setCreatedAt(Date createdAt) {
+	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
 	}
 
@@ -74,28 +79,36 @@ public class Notification implements Serializable {
 		this.title = title;
 	}
 
+	public User getUser1() {
+		return this.user1;
+	}
+
+	public void setUser1(User user1) {
+		this.user1 = user1;
+	}
+
+	public User getUser2() {
+		return this.user2;
+	}
+
+	public void setUser2(User user2) {
+		this.user2 = user2;
+	}
+
+	public Trip getTrip() {
+		return this.trip;
+	}
+
+	public void setTrip(Trip trip) {
+		this.trip = trip;
+	}
+
 	public Status getStatus() {
 		return this.status;
 	}
 
 	public void setStatus(Status status) {
 		this.status = status;
-	}
-
-	public TripPlanner getTripPlanner() {
-		return this.tripPlanner;
-	}
-
-	public void setTripPlanner(TripPlanner tripPlanner) {
-		this.tripPlanner = tripPlanner;
-	}
-
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 }

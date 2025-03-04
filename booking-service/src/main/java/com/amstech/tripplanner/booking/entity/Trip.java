@@ -72,6 +72,10 @@ public class Trip implements Serializable {
 	@OneToMany(mappedBy="trip")
 	private List<Meal> meals;
 
+	//bi-directional many-to-one association to Notification
+	@OneToMany(mappedBy="trip")
+	private List<Notification> notifications;
+
 	//bi-directional many-to-one association to Transport
 	@OneToMany(mappedBy="trip")
 	private List<Transport> transports;
@@ -300,6 +304,28 @@ public class Trip implements Serializable {
 		meal.setTrip(null);
 
 		return meal;
+	}
+
+	public List<Notification> getNotifications() {
+		return this.notifications;
+	}
+
+	public void setNotifications(List<Notification> notifications) {
+		this.notifications = notifications;
+	}
+
+	public Notification addNotification(Notification notification) {
+		getNotifications().add(notification);
+		notification.setTrip(this);
+
+		return notification;
+	}
+
+	public Notification removeNotification(Notification notification) {
+		getNotifications().remove(notification);
+		notification.setTrip(null);
+
+		return notification;
 	}
 
 	public List<Transport> getTransports() {

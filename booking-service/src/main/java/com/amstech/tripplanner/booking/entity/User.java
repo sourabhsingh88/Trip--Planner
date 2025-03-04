@@ -56,8 +56,12 @@ public class User implements Serializable {
 	private List<Feedback> feedbacks;
 
 	//bi-directional many-to-one association to Notification
-	@OneToMany(mappedBy="user")
-	private List<Notification> notifications;
+	@OneToMany(mappedBy="user1")
+	private List<Notification> notifications1;
+
+	//bi-directional many-to-one association to Notification
+	@OneToMany(mappedBy="user2")
+	private List<Notification> notifications2;
 
 	//bi-directional many-to-one association to TripPlanner
 	@OneToMany(mappedBy="user")
@@ -206,26 +210,48 @@ public class User implements Serializable {
 		return feedback;
 	}
 
-	public List<Notification> getNotifications() {
-		return this.notifications;
+	public List<Notification> getNotifications1() {
+		return this.notifications1;
 	}
 
-	public void setNotifications(List<Notification> notifications) {
-		this.notifications = notifications;
+	public void setNotifications1(List<Notification> notifications1) {
+		this.notifications1 = notifications1;
 	}
 
-	public Notification addNotification(Notification notification) {
-		getNotifications().add(notification);
-		notification.setUser(this);
+	public Notification addNotifications1(Notification notifications1) {
+		getNotifications1().add(notifications1);
+		notifications1.setUser1(this);
 
-		return notification;
+		return notifications1;
 	}
 
-	public Notification removeNotification(Notification notification) {
-		getNotifications().remove(notification);
-		notification.setUser(null);
+	public Notification removeNotifications1(Notification notifications1) {
+		getNotifications1().remove(notifications1);
+		notifications1.setUser1(null);
 
-		return notification;
+		return notifications1;
+	}
+
+	public List<Notification> getNotifications2() {
+		return this.notifications2;
+	}
+
+	public void setNotifications2(List<Notification> notifications2) {
+		this.notifications2 = notifications2;
+	}
+
+	public Notification addNotifications2(Notification notifications2) {
+		getNotifications2().add(notifications2);
+		notifications2.setUser2(this);
+
+		return notifications2;
+	}
+
+	public Notification removeNotifications2(Notification notifications2) {
+		getNotifications2().remove(notifications2);
+		notifications2.setUser2(null);
+
+		return notifications2;
 	}
 
 	public List<TripPlanner> getTripPlanners() {
