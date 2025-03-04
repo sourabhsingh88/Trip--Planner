@@ -29,10 +29,7 @@ server:
   servlet:
     context-path: /booking-service-api-local
   port: 1002
-  
-  
-  
-  
+
 logging:
   file.name: logs/booking-service.log
   pattern:
@@ -42,3 +39,5 @@ logging:
     org.springframework.web: INFO
     org.hibernate: INFO
     com.amstech.student: INFO
+
+

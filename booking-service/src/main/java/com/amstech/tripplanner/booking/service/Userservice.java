@@ -2,22 +2,26 @@ package com.amstech.tripplanner.booking.service;
 
 import java.util.Date;
 
+
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.amstech.tripplanner.booking.entity.Location;
 import com.amstech.tripplanner.booking.entity.User;
-import com.amstech.tripplanner.booking.entity.UserRole;
+
 import com.amstech.tripplanner.booking.modal.request.*;
 import com.amstech.tripplanner.booking.repo.LocationRepo;
 import com.amstech.tripplanner.booking.repo.UserRepo;
 
 @Service
 public class Userservice {
+	
+	private Logger LOGGER = LoggerFactory.getLogger(Userservice.class);
+	
 	@Autowired
 	private UserRepo userRepo;
 
@@ -29,7 +33,7 @@ public class Userservice {
 		if (!userOptional.isPresent()) {
 			throw new Exception("User Is Not Avilable with id :" + updaterequestModel1.getId());
 		}
-		Optional<Location> locationOptional = locationRepo.findById(updaterequestModel1.getId());
+		Optional<Location> locationOptional = locationRepo.findById(updaterequestModel1.getLocationId());
 		if (!locationOptional.isPresent()) {
 			throw new Exception("Location Is Not Avilable with id :" + updaterequestModel1.getLocationId());
 		}

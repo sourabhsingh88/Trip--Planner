@@ -110,6 +110,4 @@ public class Notification implements Serializable {
 	public void setReceiver(User receiver) {
 		this.receiver = receiver;
 	}
-
-
 }

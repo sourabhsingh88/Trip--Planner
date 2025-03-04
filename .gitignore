@@ -2,12 +2,17 @@
 .project
 .settings/
 target/
+<<<<<<< HEAD
 /logs/
 */logs/
+=======
+logs/
+>>>>>>> d2f5bfce3c6dccaed8b2148c4584782518cfa10e
 */.classpath
 */.project
 */.settings/
 */target/
+*/logs/
        
         
        
