@@ -29,3 +29,17 @@ server:
   servlet:
     context-path: /booking-service-api-prod
   port: 3002
+  
+  
+  
+    
+logging:
+  file.name: logs/booking-service.log
+  pattern:
+    console: "%d %-5level [%thread] %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    org.springframework.web: INFO
+    org.hibernate: INFO
+    com.amstech.student: INFO    
+  

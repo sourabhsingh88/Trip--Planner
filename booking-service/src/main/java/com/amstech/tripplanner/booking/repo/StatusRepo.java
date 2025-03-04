@@ -4,8 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.amstech.tripplanner.booking.entity.Status;
 
-public interface StatusRepo extends JpaRepository<Status, Integer> {
 
-	
-	
+public interface StatusRepo extends JpaRepository<Status, Integer>{
+
+
 }

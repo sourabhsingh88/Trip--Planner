@@ -4,6 +4,8 @@ import java.io.Serializable;
 import jakarta.persistence.*;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the activity database table.
@@ -29,6 +31,7 @@ public class Activity implements Serializable {
 
 	//bi-directional many-to-one association to Trip
 	@ManyToOne
+	@JsonIgnore
 	private Trip trip;
 
 	public Activity() {
