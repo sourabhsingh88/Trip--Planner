@@ -55,11 +55,13 @@ public class User implements Serializable {
 	private List<Feedback> feedbacks;
 
 	//bi-directional many-to-one association to Notification
+
 	@OneToMany(mappedBy="sender")
 	private List<Notification> notifications1;
 
 	//bi-directional many-to-one association to Notification
 	@OneToMany(mappedBy="receiver")
+
 	private List<Notification> notifications2;
 
 	//bi-directional many-to-one association to TripPlanner
@@ -222,14 +224,18 @@ public class User implements Serializable {
 
 	public Notification addNotifications1(Notification notifications1) {
 		getNotifications1().add(notifications1);
+
 		notifications1.setSender(this);
+
 
 		return notifications1;
 	}
 
 	public Notification removeNotifications1(Notification notifications1) {
 		getNotifications1().remove(notifications1);
+
 		notifications1.setSender(null);
+
 
 		return notifications1;
 	}
@@ -244,14 +250,18 @@ public class User implements Serializable {
 
 	public Notification addNotifications2(Notification notifications2) {
 		getNotifications2().add(notifications2);
+
 		notifications2.setReceiver(this);
+
 
 		return notifications2;
 	}
 
 	public Notification removeNotifications2(Notification notifications2) {
 		getNotifications2().remove(notifications2);
+
 		notifications2.setReceiver(null);
+
 
 		return notifications2;
 	}

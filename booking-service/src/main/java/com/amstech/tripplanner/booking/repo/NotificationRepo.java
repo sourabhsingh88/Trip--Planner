@@ -17,11 +17,5 @@ public interface NotificationRepo extends JpaRepository<Notification, Integer> {
 	List<Notification> findAllByReceiverId( @Param("receiverId") int receiverId);
 	
 	
-	
-//	
-//	@Query("select n from Notification n where n.user.id =:userId and n.status.id =1")
-//	List<Notification> findByUserId(@Param("userId") int userId);
-//	
-//	@Query("select n from Notification n where n.trip.tripPlanner.id =:tripPlannerId and n.status.id =1")
-//	List<Notification> findByTripPlannerId(@Param("tripPlannerId") int tripPlannerId);
+
 }
