@@ -39,6 +39,6 @@ logging:
   level:
     org.springframework.web: INFO
     org.hibernate: INFO
-    com.amstech.student: INFO
+    com.amstech.tripplanner.booking: INFO
 
 
