@@ -26,7 +26,8 @@ public class Notification implements Serializable {
 
 	private String title;
 
-
+	@ManyToOne
+	@JoinColumn(name = "status_id")
 	private Status status;
 
 	//bi-directional many-to-one association to Trip
