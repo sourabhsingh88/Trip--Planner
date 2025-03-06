@@ -15,6 +15,7 @@ import com.amstech.tripplanner.booking.entity.UserRole;
 import com.amstech.tripplanner.booking.repo.LocationRepo;
 import com.amstech.tripplanner.booking.repo.UserRepo;
 import com.amstech.tripplanner.booking.reques.*;
+import com.asmstech.tripplanner.booking.response.UserFindAllResponsemodel;
 
 @Service
 public class Userservice {
@@ -74,5 +75,22 @@ public class Userservice {
 		}
 		user.setIsDeleted(1);
 		userRepo.save(user);
+	}
+	
+	public void findAll(UserFindAllResponsemodel findAllResponsemodel) throws Exception {
+		Optional<Location>locationOptional = locationRepo.findById(findAllResponsemodel.getLocationId());
+		if (!locationOptional.isPresent()) {
+			throw new Exception("Location Is Not Avilable with id :" + findAllResponsemodel.getLocationId());
+		}
+		User user = new User();
+		user.setLocation(locationOptional.get());
+		user.setName(findAllResponsemodel.getName());
+		user.setEmail(findAllResponsemodel.getEmail());
+		user.setPhoneNumber(findAllResponsemodel.getPhoneNumber());
+		user.setGender(findAllResponsemodel.getGender());
+		user.setPassword(findAllResponsemodel.getPassword());
+		user.setDob(findAllResponsemodel.getDob());
+		userRepo.save(user);
+	
 	}
 }

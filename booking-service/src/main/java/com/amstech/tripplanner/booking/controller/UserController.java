@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.amstech.tripplanner.booking.reques.UserSignUpRequestModel;
 import com.amstech.tripplanner.booking.reques.UserUpdateRequestModel1;
 import com.amstech.tripplanner.booking.service.Userservice;
+import com.asmstech.tripplanner.booking.response.UserFindAllResponsemodel;
 
 @RestController
 @RequestMapping("/user")
@@ -63,7 +64,18 @@ public class UserController {
 				}
 				
 			}
-		
+			@RequestMapping(method = RequestMethod.POST, value ="/findAll",consumes = "application/json", produces = "application/json")
+			public ResponseEntity<Object> singup(@RequestBody UserFindAllResponsemodel findAllResponsemodel){
+				
+				
+				try {
+					userservice.findAll(findAllResponsemodel);
+					return new ResponseEntity<Object>("Data save success",HttpStatus.OK);
+				} catch (Exception e) {
+					e.printStackTrace();
+				  return new ResponseEntity<Object>("failed to save",HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+			}
 		
 	
 	}
