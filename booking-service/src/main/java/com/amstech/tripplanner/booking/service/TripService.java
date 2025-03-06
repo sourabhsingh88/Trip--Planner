@@ -69,7 +69,7 @@ public class TripService {
 		tripDetailResponseModal.setPrice(trip.getPrice());
 		tripDetailResponseModal.setImgURL(trip.getImgUrl());
 		
-//		tripDetailResponseModal.setTripPlannerName(trip.getTripPlanner().getUser().g);
+		tripDetailResponseModal.setTripPlannerName(trip.getTripPlanner().getUser().getName());
 		
 		tripDetailResponseModal.setCountryName(trip.getLocation().getCity().getState().getCountry());
 		tripDetailResponseModal.setStateName(trip.getLocation().getCity().getState().getName());
