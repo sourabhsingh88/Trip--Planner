@@ -25,6 +25,8 @@ public class User implements Serializable {
 
 	@Temporal(TemporalType.DATE)
 	private Date dob;
+	
+	private String name;
 
 	private String email;
 
@@ -32,9 +34,6 @@ public class User implements Serializable {
 
 	@Column(name="is_deleted")
 	private int isDeleted;
-
-	private String name;
-
 	private String password;
 
 	@Column(name="phone_number")
@@ -111,6 +110,15 @@ public class User implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getGender() {
 		return this.gender;
@@ -128,13 +136,7 @@ public class User implements Serializable {
 		this.isDeleted = isDeleted;
 	}
 
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+	
 
 	public String getPassword() {
 		return this.password;
