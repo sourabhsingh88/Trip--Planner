@@ -20,7 +20,7 @@ import com.amstech.tripplanner.booking.repo.UserRoleRepo;
 @Service
 public class UserRoleService {
 
-	private final Logger LOGGER = LoggerFactory.getLogger(BookingController.class);
+	private final Logger LOGGER = LoggerFactory.getLogger(UserRoleService.class);
 
 	@Autowired
 	private UserRoleRepo userRoleRepo;

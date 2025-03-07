@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.amstech.tripplanner.booking.modal.request.BookingCreateRequestModal;
 import com.amstech.tripplanner.booking.modal.request.UserRoleAssigneRequestModal;
 import com.amstech.tripplanner.booking.service.UserRoleService;
 
@@ -18,7 +17,7 @@ import com.amstech.tripplanner.booking.service.UserRoleService;
 @RequestMapping("user-role")
 public class UserRoleConroller {
 	
-	private final Logger LOGGER = LoggerFactory.getLogger(BookingController.class);
+	private final Logger LOGGER = LoggerFactory.getLogger(UserRoleConroller.class);
 	
 	@Autowired
 	private UserRoleService userRoleService;
