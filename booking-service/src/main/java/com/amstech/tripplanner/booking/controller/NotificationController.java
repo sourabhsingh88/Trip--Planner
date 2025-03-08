@@ -39,7 +39,7 @@ public class NotificationController {
 		try {
 			notificationService.create(notificationCreateRequestModal);
 			return new ResponseEntity<Object>("Notification Create SuccessFully ",HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (Exception e) { 
 			e.printStackTrace();
 			LOGGER.error("failed to Create Notification due to: {}", e.getMessage(), e);
 			return new ResponseEntity<Object>("failed to Create Notification due to : " + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);

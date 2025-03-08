@@ -5,7 +5,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql://localhost:3306/tripplanner
     username: root
-    password: Sawan@2144
+    password: root
 
     driver-class: com.mysql.cj.jdbc.Driver
     hikari:
