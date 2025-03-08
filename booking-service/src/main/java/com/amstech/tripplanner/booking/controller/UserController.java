@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import com.amstech.tripplanner.booking.modal.request.UserEmailUpdateModal;
 import com.amstech.tripplanner.booking.modal.request.UserLoginRequestModal;
 import com.amstech.tripplanner.booking.modal.request.UserSignUpRequestModel;
+import com.amstech.tripplanner.booking.modal.request.UserUpdatePasswordRequestModal;
 import com.amstech.tripplanner.booking.modal.request.UserUpdatePhoneNumber;
 import com.amstech.tripplanner.booking.modal.request.UserUpdateRequestModel1;
 import com.amstech.tripplanner.booking.modal.response.UserResponseModal;
@@ -106,6 +107,17 @@ public class UserController {
 		LOGGER.info("Updating user detail with id: {} ", updatePhoneNumberModal.getId());
 		try {
 			userservice.updatePhoneNumber(updatePhoneNumberModal);
+			return new ResponseEntity<>("Update success", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("Update Failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	@RequestMapping(method = RequestMethod.PUT, value = "/update-password", consumes = "application/json", produces = "application/json")
+	public ResponseEntity<Object> updatePassword(@RequestBody UserUpdatePasswordRequestModal updatePasswordModal ) {
+		LOGGER.info("Updating user detail with id: {} ", updatePasswordModal.getId());
+		try {
+			userservice.updatePassword(updatePasswordModal);
 			return new ResponseEntity<>("Update success", HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
