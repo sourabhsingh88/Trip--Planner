@@ -10,5 +10,4 @@ public class TripPlannerApplyRequestModal {
 	private int experience;
 	private String companyName;
 	private String bio;
-	
 }
