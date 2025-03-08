@@ -15,7 +15,7 @@ import com.amstech.tripplanner.booking.repo.StatusRepo;
 import com.amstech.tripplanner.booking.repo.TripRepo;
 
 @Service
-public class TripService {
+public class TripService {  
 
 	private final Logger LOGGER = LoggerFactory.getLogger(TripService.class);
 

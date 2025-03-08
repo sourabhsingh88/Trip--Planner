@@ -8,7 +8,7 @@ import io.swagger.v3.oas.models.info.Info;
 
 @Configuration
 public class OpenAPIConfiguration {
-	@Bean
+	@  Bean
 	public OpenAPI defineOpenApi() {
 
 		Info information = new Info().title("Trip Planner").version("1.0").description("This is faltu");
