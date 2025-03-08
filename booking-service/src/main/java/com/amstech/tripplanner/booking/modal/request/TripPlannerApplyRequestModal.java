@@ -6,6 +6,7 @@ public class TripPlannerApplyRequestModal {
 	private int experience;
 	private String companyName;
 	private String bio;
+	
 	public int getUserId() {
 		return userId;
 	}
