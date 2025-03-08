@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.amstech.tripplanner.booking.modal.request.UserEmailUpdateModal;
 import com.amstech.tripplanner.booking.modal.request.UserLoginRequestModal;
 import com.amstech.tripplanner.booking.modal.request.UserSignUpRequestModel;
+import com.amstech.tripplanner.booking.modal.request.UserUpdatePhoneNumber;
 import com.amstech.tripplanner.booking.modal.request.UserUpdateRequestModel1;
 import com.amstech.tripplanner.booking.modal.response.UserResponseModal;
 import com.amstech.tripplanner.booking.service.Userservice;
@@ -85,6 +88,28 @@ public class UserController {
 			e.printStackTrace();
 			return new ResponseEntity<>("Failed to delete user due to " + e.getMessage(),
 					HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	@RequestMapping(method = RequestMethod.PUT, value = "/update-email", consumes = "application/json", produces = "application/json")
+	public ResponseEntity<Object> updateEmail(@RequestBody UserEmailUpdateModal updateEmailUpdateModal ) {
+		LOGGER.info("Updating user detail with id: {} ", updateEmailUpdateModal.getId());
+		try {
+			userservice.updateEmail(updateEmailUpdateModal);
+			return new ResponseEntity<>("Update success", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("Update Failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	@RequestMapping(method = RequestMethod.PUT, value = "/update-phoneNumber", consumes = "application/json", produces = "application/json")
+	public ResponseEntity<Object> updatePhoneNumber(@RequestBody UserUpdatePhoneNumber updatePhoneNumberModal ) {
+		LOGGER.info("Updating user detail with id: {} ", updatePhoneNumberModal.getId());
+		try {
+			userservice.updatePhoneNumber(updatePhoneNumberModal);
+			return new ResponseEntity<>("Update success", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("Update Failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

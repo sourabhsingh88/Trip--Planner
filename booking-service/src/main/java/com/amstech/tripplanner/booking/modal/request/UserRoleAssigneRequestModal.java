@@ -1,14 +1,13 @@
 package com.amstech.tripplanner.booking.modal.request;
 
+
 import lombok.Data;
 
 @Data
-public class BookingCreateRequestModal {
+public class UserRoleAssigneRequestModal {
 
 	private int userId;
-	private int tripId;
-	
-	
+	private int roleId;
 	
 	
 }

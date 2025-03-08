@@ -114,4 +114,24 @@ public class Userservice {
 		return userResponseModal;
 	}
 
+	public void updateEmail(UserEmailUpdateModal updateEmailUpdateModal) throws Exception {
+		Optional<User> userOptional = userRepo.findById(updateEmailUpdateModal.getId());
+		if (!userOptional.isPresent()) {
+			throw new Exception("User Is Not Avilable with id :" + updateEmailUpdateModal.getId());
+		}
+		User user = userOptional.get();
+		user.setEmail(updateEmailUpdateModal.getEmail());
+		user.setUpdatedAt(new Date());
+		userRepo.save(user);
+	}
+	public void updatePhoneNumber(UserUpdatePhoneNumber updatePhoneNumberModal) throws Exception {
+		Optional<User> userOptional = userRepo.findById(updatePhoneNumberModal.getId());
+		if (!userOptional.isPresent()) {
+			throw new Exception("User Is Not Avilable with id :" + updatePhoneNumberModal.getId());
+		}
+		User user = userOptional.get();
+		user.setPhoneNumber(updatePhoneNumberModal.getPhoneNumber());
+		user.setUpdatedAt(new Date());
+		userRepo.save(user);
+	}
 }
