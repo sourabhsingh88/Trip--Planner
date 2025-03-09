@@ -134,4 +134,15 @@ public class Userservice {
 		user.setUpdatedAt(new Date());
 		userRepo.save(user);
 	}
+
+public void updatePassword(UserUpdatePasswordRequestModal updatepasswordModal) throws Exception {
+	Optional<User> userOptional = userRepo.findById(updatepasswordModal.getId());
+	if (!userOptional.isPresent()) {
+		throw new Exception("User Is Not Avilable with id :" + updatepasswordModal.getId());
+	}
+	User user = userOptional.get();
+	user.setPassword(updatepasswordModal.getPassword());
+	user.setUpdatedAt(new Date());
+	userRepo.save(user);
+}
 }

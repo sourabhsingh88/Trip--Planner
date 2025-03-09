@@ -3,10 +3,11 @@ package com.amstech.tripplanner.booking.modal.request;
 import lombok.Data;
 
 @Data
-public class UserRoleAssigneRequestModal {
+public class TripPlannerUpdateRequestModel {
 
-	private int userId;
-	private int roleId;
+	private int id;
+	private int statusId;
+
 	
-	
+
 }

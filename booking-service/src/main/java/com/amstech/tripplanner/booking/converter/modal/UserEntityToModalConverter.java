@@ -9,6 +9,7 @@ import com.amstech.tripplanner.booking.modal.response.UserResponseModal;
 public class UserEntityToModalConverter {
 	public UserResponseModal findById(User user) {
 		UserResponseModal userResponseModal = new UserResponseModal();
+		userResponseModal.setId(user.getId());
 		userResponseModal.setCountryName(user.getLocation().getCity().getState().getCountry());
 		userResponseModal.setStateName(user.getLocation().getCity().getState().getName());
 		userResponseModal.setCityName(user.getLocation().getCity().getName());

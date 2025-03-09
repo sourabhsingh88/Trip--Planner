@@ -1,6 +1,7 @@
 package com.amstech.tripplanner.booking.modal.response;
 
 import java.util.Date;
+
 import java.util.List;
 
 import com.amstech.tripplanner.booking.entity.Accommodation;

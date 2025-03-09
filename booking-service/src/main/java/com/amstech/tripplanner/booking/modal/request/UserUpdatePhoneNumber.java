@@ -1,19 +1,10 @@
 package com.amstech.tripplanner.booking.modal.request;
 
+import lombok.Data;
+
+@Data
 public class UserUpdatePhoneNumber {
 private String PhoneNumber;
 private int id;
-public String getPhoneNumber() {
-	return PhoneNumber;
-}
-public void setPhoneNumber(String phoneNumber) {
-	PhoneNumber = phoneNumber;
-}
-public int getId() {
-	return id;
-}
-public void setId(int id) {
-	this.id = id;
-}
 
 }

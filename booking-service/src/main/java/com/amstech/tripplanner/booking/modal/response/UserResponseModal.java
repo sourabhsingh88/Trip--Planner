@@ -3,7 +3,6 @@ package com.amstech.tripplanner.booking.modal.response;
 import java.util.Date;
 
 import lombok.Data;
-
 @Data
 public class UserResponseModal {
 	private int id;
