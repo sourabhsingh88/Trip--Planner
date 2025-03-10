@@ -8,7 +8,7 @@ import com.amstech.tripplanner.booking.entity.*;
 public interface UserRepo extends JpaRepository<User, Integer>{
 	
 	@Query("select u from User u where u.email= :email")
-	User findByemail(@Param("email") String email);
+	User findByemail(@Param("email") String email);  
 	
 	@Query("select u from User u where u.phoneNumber= :phoneNumber")
 	User findByPhonenumber(@Param("phoneNumber") String phoneNumber);
