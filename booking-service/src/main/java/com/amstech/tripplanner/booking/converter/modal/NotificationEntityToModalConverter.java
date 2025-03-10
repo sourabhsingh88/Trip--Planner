@@ -32,5 +32,22 @@ public class NotificationEntityToModalConverter {
 		}
 		return notificationResponseModals;
 	}
+	
+	public NotificationResponseModal findById(Notification notification) {
+		
+		NotificationResponseModal notificationResponseModal = new NotificationResponseModal();
+		notificationResponseModal.setId(notification.getId());
+		notificationResponseModal.setReceiverId(notification.getReceiver().getId());
+		notificationResponseModal.setReceiverName(notification.getReceiver().getName());
+		notificationResponseModal.setSenderId(notification.getSender().getId());
+		notificationResponseModal.setSenderName(notification.getSender().getName());
+		notificationResponseModal.setTripId(notification.getTrip().getId());
+		notificationResponseModal.setTripName(notification.getTrip().getName());
+		notificationResponseModal.setTitle(notification.getTitle());
+		notificationResponseModal.setMessage(notification.getMessage());
+		notificationResponseModal.setStatusName(notification.getStatus().getName());
+		notificationResponseModal.setCreatedAt(notification.getCreatedAt());
+		return notificationResponseModal;
+	}
 
 }
