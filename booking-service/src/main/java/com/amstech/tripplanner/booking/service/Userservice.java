@@ -1,6 +1,8 @@
 package com.amstech.tripplanner.booking.service;
 
 import java.util.List;
+
+
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -71,7 +73,7 @@ public class Userservice {
 		}
 		User user = userModelToEntityConverter.update(updateRequestModel, userOptional, locationOptional);
 		User updateUser = userRepo.save(user);
-		return userEntityToModalConverter.findById(updateUser);
+		return userEntityToModalConverter.findById (updateUser);
 	}
 
 	public void softDeletedId(Integer id) throws Exception {
