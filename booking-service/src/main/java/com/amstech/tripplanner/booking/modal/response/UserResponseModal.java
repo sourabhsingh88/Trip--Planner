@@ -10,12 +10,11 @@ public class UserResponseModal {
 	private String email;
 	private String phoneNumber;
 	private String gender;
-	private String password;
 	private Date dob;
-	private int locationId;
 	private String locationName;
 	private String cityName;
 	private String stateName;
 	private String countryName;
+	private int isDeleted;
 
 }

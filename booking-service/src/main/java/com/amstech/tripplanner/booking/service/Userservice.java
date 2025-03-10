@@ -1,13 +1,15 @@
 package com.amstech.tripplanner.booking.service;
 
-import java.util.Date;
-
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import com.amstech.tripplanner.booking.converter.entity.UserModelToEntityConverter;
 import com.amstech.tripplanner.booking.converter.modal.UserEntityToModalConverter;
 import com.amstech.tripplanner.booking.entity.Location;
 import com.amstech.tripplanner.booking.entity.User;
@@ -29,50 +31,53 @@ public class Userservice {
 	private LocationRepo locationRepo;
 
 	@Autowired
+	private UserModelToEntityConverter userModelToEntityConverter;
+
+	@Autowired
 	private UserEntityToModalConverter userEntityToModalConverter;
 
-	public void update(UserUpdateRequestModel1 updaterequestModel1) throws Exception {
-		Optional<User> userOptional = userRepo.findById(updaterequestModel1.getId());
-		if (!userOptional.isPresent()) {
-			throw new Exception("User Is Not Avilable with id :" + updaterequestModel1.getId());
-		}
-		Optional<Location> locationOptional = locationRepo.findById(updaterequestModel1.getLocationId());
-		if (!locationOptional.isPresent()) {
-			throw new Exception("Location Is Not Avilable with id :" + updaterequestModel1.getLocationId());
-		}
-		User user = userOptional.get();
-
-		user.setGender(updaterequestModel1.getGender());
-		user.setName(updaterequestModel1.getName());
-		user.setLocation(locationOptional.get());
-		user.setDob(updaterequestModel1.getDob());
-		user.setUpdatedAt(new Date());
-
-		userRepo.save(user);
+	public Userservice() {
+		LOGGER.debug("Userservice : Object Created");
 	}
 
-	public void signup(UserSignUpRequestModel signupRequestModel) throws Exception {
-
+	public UserResponseModal signup(UserSignUpRequestModel signupRequestModel) throws Exception {
 		Optional<Location> locationOptional = locationRepo.findById(signupRequestModel.getLocationId());
 		if (!locationOptional.isPresent()) {
 			throw new Exception("Location Is Not Avilable with id :" + signupRequestModel.getLocationId());
 		}
-		User user = new User();
+		User userByemail = userRepo.findByemail(signupRequestModel.getEmail());
+		if (userByemail != null) {
+			throw new Exception("User Is Already Exist with is Email : " + signupRequestModel.getEmail());
+		}
+		User userByPhoneMunber = userRepo.findByPhonenumber(signupRequestModel.getPhoneNumber());
+		if (userByPhoneMunber != null) {
+			throw new Exception("User Is Already Exist with is PhoneNumber : " + signupRequestModel.getPhoneNumber());
+		}
+		User user = userModelToEntityConverter.signup(signupRequestModel, locationOptional);
+		User savedUser = userRepo.save(user);
+		return userEntityToModalConverter.findById(savedUser);
+	}
 
-		user.setLocation(locationOptional.get());
-		user.setName(signupRequestModel.getName());
-		user.setEmail(signupRequestModel.getEmail());
-		user.setPhoneNumber(signupRequestModel.getPhoneNumber());
-		user.setGender(signupRequestModel.getGender());
-		user.setPassword(signupRequestModel.getPassword());
-		user.setDob(signupRequestModel.getDob());
-		userRepo.save(user);
+	public UserResponseModal update(UserUpdateRequestModel updateRequestModel) throws Exception {
+
+		Optional<User> userOptional = userRepo.findById(updateRequestModel.getId());
+		if (!userOptional.isPresent()) {
+			throw new Exception("User Is Not Avilable with id :" + updateRequestModel.getId());
+		}
+
+		Optional<Location> locationOptional = locationRepo.findById(updateRequestModel.getLocationId());
+		if (!locationOptional.isPresent()) {
+			throw new Exception("Location Is Not Avilable with id :" + updateRequestModel.getLocationId());
+		}
+		User user = userModelToEntityConverter.update(updateRequestModel, userOptional, locationOptional);
+		User updateUser = userRepo.save(user);
+		return userEntityToModalConverter.findById(updateUser);
 	}
 
 	public void softDeletedId(Integer id) throws Exception {
 		Optional<User> userOptional = userRepo.findById(id);
 		if (userOptional.isEmpty()) {
-			throw new Exception("user not found");
+			throw new Exception("User is Not Found with Id : " + id);
 		}
 		User user = userOptional.get();
 		if (user.getIsDeleted() == 1) {
@@ -92,9 +97,9 @@ public class Userservice {
 			throw new Exception(user.getName() + " you account is currentlly decative so you can't see the detaile");
 		}
 		UserResponseModal userResponseModal = userEntityToModalConverter.findById(user);
-
 		return userResponseModal;
 	}
+
 	public UserResponseModal login(UserLoginRequestModal userLoginRequestModal) throws Exception {
 
 		User userName = userRepo.findByUserName(userLoginRequestModal.getUserName());
@@ -105,44 +110,81 @@ public class Userservice {
 		if (userlogin == null) {
 			throw new Exception("Password are Invalid ");
 		}
-
 		if (userlogin.getIsDeleted() == 1) {
 			throw new Exception(userlogin.getName() + " you account is currentlly ddecative so you can't Login");
 		}
-
 		UserResponseModal userResponseModal = userEntityToModalConverter.findById(userlogin);
 		return userResponseModal;
 	}
 
-	public void updateEmail(UserEmailUpdateModal updateEmailUpdateModal) throws Exception {
+	public UserResponseModal updateEmail(UserUpdateEmailRequestModal updateEmailUpdateModal) throws Exception {
 		Optional<User> userOptional = userRepo.findById(updateEmailUpdateModal.getId());
 		if (!userOptional.isPresent()) {
 			throw new Exception("User Is Not Avilable with id :" + updateEmailUpdateModal.getId());
 		}
-		User user = userOptional.get();
-		user.setEmail(updateEmailUpdateModal.getEmail());
-		user.setUpdatedAt(new Date());
-		userRepo.save(user);
+		User userByemail = userRepo.findByemail(updateEmailUpdateModal.getEmail());
+		if (userByemail != null) {
+			throw new Exception("User Is Already Exist with is Email : " + updateEmailUpdateModal.getEmail());
+		}
+		User user = userModelToEntityConverter.updateEmail(updateEmailUpdateModal, userOptional);
+		User updatedUser = userRepo.save(user);
+		return userEntityToModalConverter.findById(updatedUser);
 	}
-	public void updatePhoneNumber(UserUpdatePhoneNumber updatePhoneNumberModal) throws Exception {
+
+	public UserResponseModal updatePhoneNumber(UserUpdatePhoneNumberRequestModal updatePhoneNumberModal)
+			throws Exception {
 		Optional<User> userOptional = userRepo.findById(updatePhoneNumberModal.getId());
 		if (!userOptional.isPresent()) {
 			throw new Exception("User Is Not Avilable with id :" + updatePhoneNumberModal.getId());
 		}
-		User user = userOptional.get();
-		user.setPhoneNumber(updatePhoneNumberModal.getPhoneNumber());
-		user.setUpdatedAt(new Date());
-		userRepo.save(user);
+		User userByPhoneMunber = userRepo.findByPhonenumber(updatePhoneNumberModal.getPhoneNumber());
+		if (userByPhoneMunber != null) {
+			throw new Exception("User Is Already Exist with is PhoneNumber : " + updatePhoneNumberModal.getPhoneNumber());
+		}
+		User user = userModelToEntityConverter.updatePhoneNumber(updatePhoneNumberModal, userOptional);
+		User updatedUser = userRepo.save(user);
+		return userEntityToModalConverter.findById(updatedUser);
 	}
 
-public void updatePassword(UserUpdatePasswordRequestModal updatepasswordModal) throws Exception {
-	Optional<User> userOptional = userRepo.findById(updatepasswordModal.getId());
-	if (!userOptional.isPresent()) {
-		throw new Exception("User Is Not Avilable with id :" + updatepasswordModal.getId());
+	public UserResponseModal updatePassword(UserUpdatePasswordRequestModal updatepasswordModal) throws Exception {
+		Optional<User> userOptional = userRepo.findById(updatepasswordModal.getId());
+		if (!userOptional.isPresent()) {
+			throw new Exception("User Is Not Avilable with id :" + updatepasswordModal.getId());
+		}
+		User user = userModelToEntityConverter.updatePassword(updatepasswordModal, userOptional);
+		User updatedUser = userRepo.save(user);
+		return userEntityToModalConverter.findById(updatedUser);
 	}
-	User user = userOptional.get();
-	user.setPassword(updatepasswordModal.getPassword());
-	user.setUpdatedAt(new Date());
-	userRepo.save(user);
-}
+
+	public List<UserResponseModal> findAllActive(Integer page, Integer size) throws Exception {
+		List<User> allActiveUser = userRepo.findAllActiveUser(PageRequest.of(page, size));
+		if (allActiveUser.isEmpty()) {
+			throw new Exception("No Active User Available");
+		}
+		return userEntityToModalConverter.findAll(allActiveUser);
+	}
+
+	public long countAllActive() throws Exception {
+		long countActiveUser = userRepo.countAllActiveUser();
+		if (countActiveUser == 0) {
+			throw new Exception("No Active User Available");
+		}
+		return countActiveUser;
+	}
+
+	public List<UserResponseModal> findAllDeactive(Integer page, Integer size) throws Exception {
+		List<User> allDeactiveUser = userRepo.findAllDeactiveUser(PageRequest.of(page, size));
+		if (allDeactiveUser.isEmpty()) {
+			throw new Exception("No Deactive User Available");
+		}
+		return userEntityToModalConverter.findAll(allDeactiveUser);
+	}
+	
+	public long countAllDeactive() throws Exception {
+		long countActiveUser = userRepo.countAllDeactiveUser();
+		if (countActiveUser == 0) {
+			throw new Exception("No Deactive User Available");
+		}
+		return countActiveUser;
+	}
 }

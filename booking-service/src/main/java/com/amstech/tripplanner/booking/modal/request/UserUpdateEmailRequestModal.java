@@ -3,8 +3,10 @@ package com.amstech.tripplanner.booking.modal.request;
 import lombok.Data;
 
 @Data
-public class UserUpdatePhoneNumber {
-private String PhoneNumber;
+public class UserUpdateEmailRequestModal {
+private String email;
 private int id;
+
+
 
 }
