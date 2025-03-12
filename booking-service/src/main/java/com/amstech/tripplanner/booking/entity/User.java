@@ -73,7 +73,7 @@ public class User implements Serializable {
 	private Location location;
 
 	//bi-directional many-to-one association to UserRole
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="user" ,cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	private List<UserRole> userRoles;
 
 	public User() {

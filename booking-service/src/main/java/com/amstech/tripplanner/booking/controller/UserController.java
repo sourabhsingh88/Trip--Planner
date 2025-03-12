@@ -16,6 +16,7 @@ import com.amstech.tripplanner.booking.modal.request.UserSignUpRequestModel;
 import com.amstech.tripplanner.booking.modal.request.UserUpdatePasswordRequestModal;
 import com.amstech.tripplanner.booking.modal.request.UserUpdatePhoneNumberRequestModal;
 import com.amstech.tripplanner.booking.modal.request.UserUpdateRequestModel;
+import com.amstech.tripplanner.booking.modal.response.LocationWithUserResponseModal;
 import com.amstech.tripplanner.booking.modal.response.UserResponseModal;
 import com.amstech.tripplanner.booking.response.RestResponse;
 import com.amstech.tripplanner.booking.service.Userservice;
@@ -37,9 +38,9 @@ public class UserController {
 	public RestResponse singup(@RequestBody UserSignUpRequestModel userSignUpRequestModel) {
 		LOGGER.info("Start Creating User Account with email : {} ", userSignUpRequestModel.getEmail());
 		try {
-			UserResponseModal userResponseModal = userservice.signup(userSignUpRequestModel);
+			 LocationWithUserResponseModal locationWithUserResponseModal = userservice.signup(userSignUpRequestModel);
 			LOGGER.info("User Response Modal Reseived");
-			return RestResponse.build().withSuccess("User Account Created Successfully", userResponseModal);
+			return RestResponse.build().withSuccess("User Account Created Successfully",locationWithUserResponseModal);
 		} catch (Exception e) {
 			LOGGER.error("Failed to save user due to : {}", e.getMessage(), e);
 			return RestResponse.build().withError("Failed to save user due to : "+ e.getMessage());

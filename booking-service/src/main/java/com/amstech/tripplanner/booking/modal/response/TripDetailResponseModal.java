@@ -31,10 +31,10 @@ public class TripDetailResponseModal {
 	private Date startDate;
 	private Date endDate;
 	private String description;
-	private List<Accommodation> accommodations;
-	private List<Activity> activities;
-	private List<Meal> meals;
-	private List<Transport> transports;
-	private List<TripBanner> tripBanners;
+	private List<AccommodationResponseModal> accommodationsResponseModals;
+	private List<ActivityResponseModal> activitiesResponseModals;
+	private List<MealResponseModal> mealsResponseModals;
+	private List<TransportResponseModal> transportsResponseModals;
+//	private List<TripBanner> tripBanners;
 	
 }

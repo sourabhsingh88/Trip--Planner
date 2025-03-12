@@ -27,7 +27,6 @@ public class TripBanner implements Serializable {
 
 	//bi-directional many-to-one association to Trip
 	@ManyToOne
-	@JsonIgnore
 	private Trip trip;
 
 	public TripBanner() {

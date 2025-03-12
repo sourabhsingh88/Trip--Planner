@@ -7,10 +7,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.amstech.tripplanner.booking.entity.Trip;
+import com.amstech.tripplanner.booking.modal.request.TripCreateRequestModal;
+import com.amstech.tripplanner.booking.modal.response.LocationWithTripResponseModal;
 import com.amstech.tripplanner.booking.modal.response.TripDetailResponseModal;
 import com.amstech.tripplanner.booking.modal.response.TripResponseModal;
+import com.amstech.tripplanner.booking.converter.entity.TripModalToEntityConverter;
+import com.amstech.tripplanner.booking.converter.modal.LocationEntityToModalConverter;
 import com.amstech.tripplanner.booking.converter.modal.TripEntityToModalConverter;
+import com.amstech.tripplanner.booking.entity.Location;
 import com.amstech.tripplanner.booking.entity.Status;
+import com.amstech.tripplanner.booking.repo.LocationRepo;
 import com.amstech.tripplanner.booking.repo.StatusRepo;
 import com.amstech.tripplanner.booking.repo.TripRepo;
 
@@ -24,7 +30,13 @@ public class TripService {
 	@Autowired
 	private StatusRepo statusRepo;
 	@Autowired
+	private LocationRepo locationRepo;
+	@Autowired
 	private TripEntityToModalConverter tripEntityToModalConverter;
+	@Autowired
+	private TripModalToEntityConverter tripModalToEntityConverter;
+	@Autowired 
+	private LocationEntityToModalConverter locationEntityToModalConverter;
 
 	private Integer continueStatusId = 9;
 	private Integer disContinueStatusId = 10;
@@ -33,6 +45,12 @@ public class TripService {
 		LOGGER.debug("TripService :Object Created");
 	}
 
+	public LocationWithTripResponseModal create(TripCreateRequestModal tripCreateRequestModal) throws Exception {
+		Location tripCreatewithLocation = tripModalToEntityConverter.tripCreate(tripCreateRequestModal);
+		Location saveLocationWithTrip = locationRepo.save(tripCreatewithLocation);
+		return  locationEntityToModalConverter.findBy(saveLocationWithTrip);
+	}
+	
 	public List<TripResponseModal> findAllContinue() throws Exception {
 
 		List<Trip> trips = tripRepo.findAllByContinueStatusId(continueStatusId);

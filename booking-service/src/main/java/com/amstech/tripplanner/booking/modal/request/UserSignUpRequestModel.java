@@ -8,12 +8,14 @@ import lombok.Data;
 @Data
 public class UserSignUpRequestModel {
 
-	private int locationId;
+	
 	private String name;
 	private String email;
 	private String phoneNumber;
 	private String gender;
 	private String password;
 	private Date dob;
-
+	private String locationName;
+	private int cityId;
+	
 }

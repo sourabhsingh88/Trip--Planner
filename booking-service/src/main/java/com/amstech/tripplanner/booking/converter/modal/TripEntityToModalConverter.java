@@ -47,11 +47,11 @@ public class TripEntityToModalConverter {
 		tripDetailResponseModal.setStartDate(trip.getStartDate());
 		tripDetailResponseModal.setEndDate(trip.getEndDate());
 		tripDetailResponseModal.setStatusName(trip.getStatus().getName());
-		tripDetailResponseModal.setAccommodations(trip.getAccommodations());
-		tripDetailResponseModal.setActivities(trip.getActivities());
-		tripDetailResponseModal.setMeals(trip.getMeals());
-		tripDetailResponseModal.setTransports(trip.getTransports());
-		tripDetailResponseModal.setTripBanners(trip.getTripBanners());
+//		tripDetailResponseModal.setAccommodations(trip.getAccommodations());
+//		tripDetailResponseModal.setActivities(trip.getActivities());
+//		tripDetailResponseModal.setMeals(trip.getMeals());
+//		tripDetailResponseModal.setTransports(trip.getTransports());
+//		tripDetailResponseModal.setTripBanners(trip.getTripBanners());
 		
 		return tripDetailResponseModal;
 	}

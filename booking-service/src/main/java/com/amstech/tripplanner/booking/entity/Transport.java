@@ -26,7 +26,6 @@ public class Transport implements Serializable {
 
 	//bi-directional many-to-one association to Trip
 	@ManyToOne
-	@JsonIgnore
 	private Trip trip;
 
 	public Transport() {
