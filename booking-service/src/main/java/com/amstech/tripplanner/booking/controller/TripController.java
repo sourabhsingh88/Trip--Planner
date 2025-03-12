@@ -9,12 +9,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.amstech.tripplanner.booking.modal.request.TripCreateRequestModal;
+import com.amstech.tripplanner.booking.modal.response.LocationWithTripResponseModal;
 import com.amstech.tripplanner.booking.modal.response.TripDetailResponseModal;
 import com.amstech.tripplanner.booking.modal.response.TripResponseModal;
+import com.amstech.tripplanner.booking.response.RestResponse;
 import com.amstech.tripplanner.booking.service.TripService;
 
 
@@ -30,6 +35,20 @@ public class TripController {
 	public TripController() {
 
 		LOGGER.info("TripController : Object Created");
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/create", consumes = "application/json",produces = "application/json")
+	public RestResponse create(@RequestBody TripCreateRequestModal tripCreateRequestModal) {
+
+		LOGGER.info("Creating Trip with name : " + tripCreateRequestModal.getName());
+		try {
+			LocationWithTripResponseModal locationWithTripResponseModal = tripService.create(tripCreateRequestModal);
+			return RestResponse.build().withSuccess("SuccessFully Create trip",locationWithTripResponseModal);
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.error("Failed to Fetching All Trips Availables due to : {}", e.getMessage(), e);
+			return RestResponse.build().withError("Failed to Create Trip due to : " + e.getMessage());
+		}
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/all", produces = "application/json")

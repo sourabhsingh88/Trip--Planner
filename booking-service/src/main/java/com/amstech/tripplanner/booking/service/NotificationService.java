@@ -132,10 +132,7 @@ public class NotificationService {
 	}
 
 	public long countAllForReciver(Integer receiverId) throws Exception {
-
 		return notificationRepo.countAllByReceiverId(receiverId, unReadId);
-	
-
 	}
 
 }

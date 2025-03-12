@@ -1,6 +1,8 @@
 package com.amstech.tripplanner.booking.service;
 
 import java.util.List;
+
+
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -10,11 +12,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.amstech.tripplanner.booking.converter.entity.UserModelToEntityConverter;
+import com.amstech.tripplanner.booking.converter.modal.LocationEntityToModalConverter;
 import com.amstech.tripplanner.booking.converter.modal.UserEntityToModalConverter;
 import com.amstech.tripplanner.booking.entity.Location;
 import com.amstech.tripplanner.booking.entity.User;
 
 import com.amstech.tripplanner.booking.modal.request.*;
+import com.amstech.tripplanner.booking.modal.response.LocationWithUserResponseModal;
 import com.amstech.tripplanner.booking.modal.response.UserResponseModal;
 import com.amstech.tripplanner.booking.repo.LocationRepo;
 import com.amstech.tripplanner.booking.repo.UserRepo;
@@ -35,16 +39,15 @@ public class Userservice {
 
 	@Autowired
 	private UserEntityToModalConverter userEntityToModalConverter;
+	
+	@Autowired
+	private LocationEntityToModalConverter locationEntityToModalConverter;
 
 	public Userservice() {
 		LOGGER.debug("Userservice : Object Created");
 	}
 
-	public UserResponseModal signup(UserSignUpRequestModel signupRequestModel) throws Exception {
-		Optional<Location> locationOptional = locationRepo.findById(signupRequestModel.getLocationId());
-		if (!locationOptional.isPresent()) {
-			throw new Exception("Location Is Not Avilable with id :" + signupRequestModel.getLocationId());
-		}
+	public LocationWithUserResponseModal signup(UserSignUpRequestModel signupRequestModel) throws Exception {
 		User userByemail = userRepo.findByemail(signupRequestModel.getEmail());
 		if (userByemail != null) {
 			throw new Exception("User Is Already Exist with is Email : " + signupRequestModel.getEmail());
@@ -53,9 +56,9 @@ public class Userservice {
 		if (userByPhoneMunber != null) {
 			throw new Exception("User Is Already Exist with is PhoneNumber : " + signupRequestModel.getPhoneNumber());
 		}
-		User user = userModelToEntityConverter.signup(signupRequestModel, locationOptional);
-		User savedUser = userRepo.save(user);
-		return userEntityToModalConverter.findById(savedUser);
+		Location location = userModelToEntityConverter.signup(signupRequestModel);
+		Location savelocationWithUser = locationRepo.save(location);
+		return locationEntityToModalConverter.findById(savelocationWithUser);
 	}
 
 	public UserResponseModal update(UserUpdateRequestModel updateRequestModel) throws Exception {
@@ -71,7 +74,7 @@ public class Userservice {
 		}
 		User user = userModelToEntityConverter.update(updateRequestModel, userOptional, locationOptional);
 		User updateUser = userRepo.save(user);
-		return userEntityToModalConverter.findById(updateUser);
+		return userEntityToModalConverter.findById (updateUser);
 	}
 
 	public void softDeletedId(Integer id) throws Exception {

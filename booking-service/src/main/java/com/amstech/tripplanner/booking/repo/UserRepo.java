@@ -20,6 +20,7 @@ public interface UserRepo extends JpaRepository<User, Integer>{
 	@Query("SELECT u FROM User u WHERE (u.email = :userName OR u.phoneNumber = :userName) AND u.password = :password")
 	User login(@Param("userName") String userName, @Param("password") String password);
 	
+	
 	@Query("select u from User u where u.isDeleted=0")
 	List<User> findAllActiveUser(Pageable pageable);
 	

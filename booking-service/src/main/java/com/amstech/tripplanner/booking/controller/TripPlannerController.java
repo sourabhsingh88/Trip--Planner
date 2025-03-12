@@ -21,13 +21,10 @@ import com.amstech.tripplanner.booking.service.TripPlannerService;
 @RequestMapping("tripplanner")
 public class TripPlannerController {
 
-	
 	private final Logger LOGGER = LoggerFactory.getLogger(BookingController.class);
 	
 	@Autowired 
 	private  TripPlannerService  tripPlannerService;
-	
-	
 	
 	public TripPlannerController() {
 		LOGGER.info("TripPlannerController : Object Created");
