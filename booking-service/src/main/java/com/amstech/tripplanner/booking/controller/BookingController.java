@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.amstech.tripplanner.booking.modal.request.BookingCreateRequestModal;
 import com.amstech.tripplanner.booking.modal.request.BookingUpdateRequestModal;
 import com.amstech.tripplanner.booking.modal.response.BookingReaponseModal;
+import com.amstech.tripplanner.booking.response.RestResponse;
 import com.amstech.tripplanner.booking.service.BookingService;
 
 @RestController
@@ -33,59 +34,72 @@ public class BookingController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value ="/create",consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Object> create(@RequestBody BookingCreateRequestModal bookingCreateRequestModal){
+	public RestResponse create(@RequestBody BookingCreateRequestModal bookingCreateRequestModal){
 		
 		LOGGER.info("Booking Create for trip with id  : {} " ,bookingCreateRequestModal.getTripId());
 		try {
-			int id = bookingService.create(bookingCreateRequestModal);
-			return new ResponseEntity<Object>("Booking Create SuccessFully with id : " + id ,HttpStatus.OK);
+			BookingReaponseModal bookingReaponseModal = bookingService.create(bookingCreateRequestModal);
+			return RestResponse.build().withSuccess("Booking Create SuccessFully",bookingReaponseModal);
 		} catch (Exception e) {
-			e.printStackTrace();
 			LOGGER.error("Failed to Create Booking due to: {}", e.getMessage(), e);
-			return new ResponseEntity<Object>("Failed to Create Booking due to : " + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+			return RestResponse.build().withError("Failed to Create Booking due to : " + e.getMessage());
 		}
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT, value ="/update-status",consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Object> updateStatus(@RequestBody BookingUpdateRequestModal bookingUpdateRequestModal){
+	@RequestMapping(method = RequestMethod.PUT, value ="/updateStatus",consumes = "application/json", produces = "application/json")
+	public RestResponse updateStatus(@RequestBody BookingUpdateRequestModal bookingUpdateRequestModal){
 		
 		LOGGER.info("Updating Booking Status for id : {} " ,bookingUpdateRequestModal.getId());
 		try {
-			int statusId = bookingService.updateStatus(bookingUpdateRequestModal);
-			return new ResponseEntity<Object>("Booking Status Update SuccessFully and Now Current Status : " + statusId,HttpStatus.OK);
+			BookingReaponseModal bookingReaponseModal = bookingService.updateStatus(bookingUpdateRequestModal);
+			return RestResponse.build().withSuccess("Booking Status Update SuccessFully",bookingReaponseModal);
 		} catch (Exception e) {
-			e.printStackTrace();
 			LOGGER.error("Failed to Update Booking Status due to : {}", e.getMessage(), e);
-			return new ResponseEntity<Object>("Failed to Update Booking Status due to : " + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+			return RestResponse.build().withError("Failed to Update Booking Status due to : " + e.getMessage());
 		}
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value ="/byid",produces = "application/json")
-	public ResponseEntity<Object> findById(@RequestParam("id") Integer id){
+	@RequestMapping(method = RequestMethod.GET, value ="/byId",produces = "application/json")
+	public RestResponse findById(@RequestParam("id") Integer id){
 		
 		LOGGER.info("Fetching Details of Booking with id : {} " ,id);
 		try {
 			BookingReaponseModal bookingReaponseModal = bookingService.findById(id);
-			return new ResponseEntity<Object>(bookingReaponseModal,HttpStatus.OK);
+			return RestResponse.build().withSuccess("Booking Found",bookingReaponseModal);
 		} catch (Exception e) {
-			e.printStackTrace();
 			LOGGER.error("Failed to Fetching Details of Booking with id due to : {}", e.getMessage(), e);
-			return new ResponseEntity<Object>("Failed to Fetching Details of Booking with id due to : " + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+			return RestResponse.build().withError("Failed to Booking Found due to : " + e.getMessage());
 		}
 	}
 	
 
-	@RequestMapping(method = RequestMethod.GET, value ="/by-userid",produces = "application/json")
-	public ResponseEntity<Object> findByUserId(@RequestParam("userId") Integer userId){
+	@RequestMapping(method = RequestMethod.GET, value ="/byUserId",produces = "application/json")
+	public RestResponse findByUserId(@RequestParam("userId") Integer userId,@RequestParam("page") Integer page, @RequestParam("size") Integer size){
 		
 		LOGGER.info("Fetching Details of Bookings for UserId : {} " ,userId);
 		try {
-			List<BookingReaponseModal> bookingReaponseModals = bookingService.findByUserId(userId);
-			return new ResponseEntity<Object>(bookingReaponseModals,HttpStatus.OK);
+			List<BookingReaponseModal> bookingReaponseModals = bookingService.findByUserId(userId, page, size);
+			long totalRecords = bookingService.countByUserId(userId);
+			return RestResponse.build().withSuccess("Booking Founds").withTotalRecords(totalRecords)
+					.withPageNumber(page).withPageSize(size).withData(bookingReaponseModals);
 		} catch (Exception e) {
-			e.printStackTrace();
 			LOGGER.error("Failed to Fetching Details of Bookingfor UserId due to : {}", e.getMessage(), e);
-			return new ResponseEntity<Object>("Failed to Fetching Details of Booking for UserId due to : " + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+			return RestResponse.build().withError("Failed to Booking Found due to : " + e.getMessage());
+		}
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value ="/all",produces = "application/json")
+	public RestResponse findAll(@RequestParam("page") Integer page, @RequestParam("size") Integer size){
+		
+		LOGGER.info("Fetching Details of Bookings  ");
+		try {
+			List<BookingReaponseModal> bookingReaponseModals = bookingService.findAll(page, size);
+			long totalRecords = bookingService.countAllBooking();
+			return RestResponse.build().withSuccess("Booking Founds").withTotalRecords(totalRecords)
+					.withPageNumber(page).withPageSize(size).withData(bookingReaponseModals);
+		} catch (Exception e) {
+			LOGGER.error("Failed to Fetching Details of Bookingfor UserId due to : {}", e.getMessage(), e);
+			return RestResponse.build().withError("Failed to Booking Found due to : " + e.getMessage());
 		}
 	}
 
