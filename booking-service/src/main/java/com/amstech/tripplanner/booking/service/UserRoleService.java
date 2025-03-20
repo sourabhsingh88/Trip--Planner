@@ -87,9 +87,9 @@ public class UserRoleService {
 	public long countByUserId(Integer userId) {
 		return userRoleRepo.countByUserId(userId);
 	}
-	
+
 	public List<UserRoleResponseModal> findAll(Integer page, Integer size) throws Exception {
-		
+
 		List<UserRole> userRoles = userRoleRepo.findAllUserRole(PageRequest.of(page, size));
 		if (userRoles.isEmpty()) {
 			throw new Exception("Not User Roles Found");
