@@ -60,6 +60,7 @@ public class UserModelToEntityConverter {
 		user.setGender(userSignUpRequestModel.getGender());
 		user.setPassword(userSignUpRequestModel.getPassword());
 		user.setDob(userSignUpRequestModel.getDob());
+		user.setProfileImage(userSignUpRequestModel.getProfieImage());
 		user.setCreatedAt(new Date());
 		user.setUpdatedAt(new Date());
 		
@@ -77,9 +78,17 @@ public class UserModelToEntityConverter {
 		return location;
 	}
 	
-	public User update(UserUpdateRequestModel updateRequestModel,Optional<User> userOptional, Optional<Location> locationOptional) {
-		User user = userOptional.get();
+	public User update(UserUpdateRequestModel updateRequestModel) throws Exception {
+		Optional<User> userOptional = userRepo.findById(updateRequestModel.getId());
+		if (!userOptional.isPresent()) {
+			throw new Exception("User Is Not Avilable with id :" + updateRequestModel.getId());
+		}
 
+		Optional<Location> locationOptional = locationRepo.findById(updateRequestModel.getLocationId());
+		if (!locationOptional.isPresent()) {
+			throw new Exception("Location Is Not Avilable with id :" + updateRequestModel.getLocationId());
+		}
+		User user = userOptional.get();
 		user.setGender(updateRequestModel.getGender());
 		user.setName(updateRequestModel.getName());
 		user.setLocation(locationOptional.get());
@@ -88,20 +97,33 @@ public class UserModelToEntityConverter {
 		return user;
 	}
 	
-	public User updateEmail(UserUpdateEmailRequestModal userUpdateEmailRequestModal,Optional<User> userOptional) {
+	public User updateEmail(UserUpdateEmailRequestModal userUpdateEmailRequestModal) throws Exception {
+		
+		Optional<User> userOptional = userRepo.findById(userUpdateEmailRequestModal.getId());
+		if (!userOptional.isPresent()) {
+			throw new Exception("User Is Not Avilable with id :" + userUpdateEmailRequestModal.getId());
+		}
 		User user = userOptional.get();
 		user.setEmail(userUpdateEmailRequestModal.getEmail());
 		user.setUpdatedAt(new Date());
 		return user;
 	}
 	
-	public User updatePhoneNumber(UserUpdatePhoneNumberRequestModal userUpdatePhoneNumberRequestModal,Optional<User> userOptional) {
+	public User updatePhoneNumber(UserUpdatePhoneNumberRequestModal userUpdatePhoneNumberRequestModal) throws Exception {
+		Optional<User> userOptional = userRepo.findById(userUpdatePhoneNumberRequestModal.getId());
+		if (!userOptional.isPresent()) {
+			throw new Exception("User Is Not Avilable with id :" + userUpdatePhoneNumberRequestModal.getId());
+		}
 		User user = userOptional.get();
 		user.setPhoneNumber(userUpdatePhoneNumberRequestModal.getPhoneNumber());
 		user.setUpdatedAt(new Date());
 		return user;
 	}
-	public User updatePassword(UserUpdatePasswordRequestModal userUpdatePasswordRequestModal,Optional<User> userOptional) {
+	public User updatePassword(UserUpdatePasswordRequestModal userUpdatePasswordRequestModal) throws Exception {
+		Optional<User> userOptional = userRepo.findById(userUpdatePasswordRequestModal.getId());
+		if (!userOptional.isPresent()) {
+			throw new Exception("User Is Not Avilable with id :" + userUpdatePasswordRequestModal.getId());
+		}
 		User user = userOptional.get();
 		user.setPassword(userUpdatePasswordRequestModal.getPassword());
 		user.setUpdatedAt(new Date());

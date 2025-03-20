@@ -36,6 +36,7 @@ public class UserEntityToModalConverter {
 	}
 
 	public List<UserResponseModal> findAll(List<User> users) {
+		
 		List<UserResponseModal> userResponseModals = new ArrayList<>();
 		for (User user : users) {
 			UserResponseModal userResponseModal = new UserResponseModal();
@@ -46,7 +47,15 @@ public class UserEntityToModalConverter {
 			userResponseModal.setGender(user.getGender());
 			userResponseModal.setPhoneNumber(user.getPhoneNumber());
 			userResponseModal.setIsDeleted(user.getIsDeleted());
-			
+			userResponseModal.setProfileImage(user.getProfileImage());
+			List<RoleResponseModal> roleResponseModals = new ArrayList<>();
+			for (UserRole userRole : user.getUserRoles()) {
+				RoleResponseModal roleResponseModal = new RoleResponseModal();
+				roleResponseModal.setId(userRole.getRole().getId());
+				roleResponseModal.setName(userRole.getRole().getName());
+				roleResponseModals.add(roleResponseModal);
+			}
+			userResponseModal.setRoles(roleResponseModals);
 			userResponseModals.add(userResponseModal);
 		}
 		return userResponseModals;

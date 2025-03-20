@@ -17,5 +17,6 @@ public class UserSignUpRequestModel {
 	private Date dob;
 	private String locationName;
 	private int cityId;
+	private String profieImage;
 	
 }
