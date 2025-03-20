@@ -42,4 +42,5 @@ logging:
     org.hibernate: INFO
     com.amstech.tripplanner.booking: INFO
 
-
+app:
+  max-file-size: 5000000	

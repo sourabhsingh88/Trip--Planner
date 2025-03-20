@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import com.amstech.tripplanner.booking.entity.Trip;
 import com.amstech.tripplanner.booking.modal.request.TripCreateRequestModal;
@@ -48,18 +49,20 @@ public class TripService {
 	public LocationWithTripResponseModal create(TripCreateRequestModal tripCreateRequestModal) throws Exception {
 		Location tripCreatewithLocation = tripModalToEntityConverter.tripCreate(tripCreateRequestModal);
 		Location saveLocationWithTrip = locationRepo.save(tripCreatewithLocation);
-		return  locationEntityToModalConverter.findBy(saveLocationWithTrip);
+		return  locationEntityToModalConverter.findTripByLocation(saveLocationWithTrip);
 	}
 	
-	public List<TripResponseModal> findAllContinue() throws Exception {
-
-		List<Trip> trips = tripRepo.findAllByContinueStatusId(continueStatusId);
+	public List<TripResponseModal> findAllContinue(Integer page, Integer size) throws Exception {
+		List<Trip> trips = tripRepo.findAllByContinueStatusId(continueStatusId,PageRequest.of(page, size));
 		if (trips.isEmpty()) {
 			throw new Exception("No trip Available");
 		}
 		List<TripResponseModal> tripResponseModals = tripEntityToModalConverter.findAll(trips);
 		return tripResponseModals;
 
+	}
+	public long countAllContinue() {
+		return tripRepo.countAllByContinueStatusId(continueStatusId);
 	}
 
 	public TripDetailResponseModal findById(Integer id) throws Exception {
@@ -77,8 +80,8 @@ public class TripService {
 
 	}
 
-	public List<TripResponseModal> findByName(String name) throws Exception {
-		List<Trip> trips = tripRepo.searchBy(name, continueStatusId);
+	public List<TripResponseModal> findByName(String name,Integer page, Integer size) throws Exception {
+		List<Trip> trips = tripRepo.searchBy(name, continueStatusId,PageRequest.of(page, size));
 
 		if (trips.isEmpty()) {
 			throw new Exception("user does not exist");
@@ -87,7 +90,12 @@ public class TripService {
 		return tripResponseModals;
 
 	}
-	public String toggleTripStatus(Integer tripId) throws Exception {
+	public long countByName(String name) {
+		return tripRepo.countSearchBy(name, continueStatusId);
+	}
+	
+	
+	public TripDetailResponseModal toggleTripStatus(Integer tripId) throws Exception {
 		Optional<Trip> tripOptional = tripRepo.findById(tripId);
 		
 		if(!tripOptional.isPresent()) {
@@ -108,7 +116,7 @@ public class TripService {
 			trip.setStatus(statusOptional.get());
 			
 			Trip updateTrip = tripRepo.save(trip);
-			return updateTrip.getStatus().getName();
+			return tripEntityToModalConverter.findById(updateTrip);
 		} 
 	}
 

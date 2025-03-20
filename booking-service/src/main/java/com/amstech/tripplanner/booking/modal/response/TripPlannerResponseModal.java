@@ -13,4 +13,5 @@ public class TripPlannerResponseModal {
 	private String companyName;
 	private int experience;
 	private String statusName;
+	private String profilePhoto;
 }

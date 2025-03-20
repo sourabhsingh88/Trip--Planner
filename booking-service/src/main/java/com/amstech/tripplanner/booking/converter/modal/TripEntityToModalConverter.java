@@ -5,7 +5,15 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.amstech.tripplanner.booking.entity.Accommodation;
+import com.amstech.tripplanner.booking.entity.Activity;
+import com.amstech.tripplanner.booking.entity.Meal;
+import com.amstech.tripplanner.booking.entity.Transport;
 import com.amstech.tripplanner.booking.entity.Trip;
+import com.amstech.tripplanner.booking.modal.response.AccommodationResponseModal;
+import com.amstech.tripplanner.booking.modal.response.ActivityResponseModal;
+import com.amstech.tripplanner.booking.modal.response.MealResponseModal;
+import com.amstech.tripplanner.booking.modal.response.TransportResponseModal;
 import com.amstech.tripplanner.booking.modal.response.TripDetailResponseModal;
 import com.amstech.tripplanner.booking.modal.response.TripResponseModal;
 
@@ -47,11 +55,55 @@ public class TripEntityToModalConverter {
 		tripDetailResponseModal.setStartDate(trip.getStartDate());
 		tripDetailResponseModal.setEndDate(trip.getEndDate());
 		tripDetailResponseModal.setStatusName(trip.getStatus().getName());
-//		tripDetailResponseModal.setAccommodations(trip.getAccommodations());
-//		tripDetailResponseModal.setActivities(trip.getActivities());
-//		tripDetailResponseModal.setMeals(trip.getMeals());
-//		tripDetailResponseModal.setTransports(trip.getTransports());
-//		tripDetailResponseModal.setTripBanners(trip.getTripBanners());
+		
+		List<AccommodationResponseModal> accommodationResponseModals = new ArrayList<>();
+		for (Accommodation accommodation : trip.getAccommodations()) {
+			AccommodationResponseModal accommodationResponseModal = new AccommodationResponseModal();
+			accommodationResponseModal.setId(accommodation.getId());
+			accommodationResponseModal.setName(accommodation.getName());
+			accommodationResponseModal.setEmail(accommodation.getEmail());
+			accommodationResponseModal.setPhoneNumber(accommodation.getPhoneNumber());
+			accommodationResponseModal.setTypes(accommodation.getTypes());
+			accommodationResponseModal.setCapacity(accommodation.getCapacity());
+			accommodationResponseModal.setDescription(accommodation.getDescription());
+			accommodationResponseModals.add(accommodationResponseModal);
+		}
+		
+		tripDetailResponseModal.setAccommodationsResponseModals(accommodationResponseModals);
+		
+		List<ActivityResponseModal> activityResponseModals = new ArrayList<>();
+		for (Activity activity : trip.getActivities()) {
+			ActivityResponseModal activityResponseModal = new ActivityResponseModal();
+			activityResponseModal.setId(activity.getId());
+			activityResponseModal.setName(activity.getName());
+			activityResponseModal.setActivityDate(activity.getActivityDate());
+			activityResponseModal.setDescription(activity.getDescription());
+			activityResponseModals.add(activityResponseModal);
+		}
+		
+		tripDetailResponseModal.setActivitiesResponseModals(activityResponseModals);
+		
+		List<MealResponseModal> mealResponseModals = new ArrayList<>();
+		for (Meal meal : trip.getMeals()) {
+			MealResponseModal mealResponseModal = new MealResponseModal();
+			mealResponseModal.setId(meal.getId());
+			mealResponseModal.setName(meal.getName());
+			mealResponseModal.setDescription(meal.getDescription());
+			mealResponseModals.add(mealResponseModal);
+		}
+		
+		tripDetailResponseModal.setMealsResponseModals(mealResponseModals);
+		
+		List<TransportResponseModal> transportResponseModals = new ArrayList<>();
+		for (Transport transport : trip.getTransports()) {
+			TransportResponseModal transportResponseModal = new TransportResponseModal();
+			transportResponseModal.setId(transport.getId());
+			transportResponseModal.setName(transport.getName());
+			transportResponseModal.setDescription(transport.getDescription());
+			transportResponseModals.add(transportResponseModal);
+		}
+		
+		tripDetailResponseModal.setTransportsResponseModals(transportResponseModals);
 		
 		return tripDetailResponseModal;
 	}

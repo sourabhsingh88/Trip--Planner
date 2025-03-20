@@ -27,7 +27,7 @@ import com.amstech.tripplanner.booking.modal.response.UserResponseModal;
 @Component
 public class LocationEntityToModalConverter {
 
-	public LocationWithUserResponseModal findById(Location location) {
+	public LocationWithUserResponseModal findUserByLocation(Location location) {
 		LocationWithUserResponseModal locationWithUserResponseModal = new LocationWithUserResponseModal();
 		locationWithUserResponseModal.setId(location.getId());
 		locationWithUserResponseModal.setName(location.getName());
@@ -43,6 +43,7 @@ public class LocationEntityToModalConverter {
 			userResponseModal.setEmail(user.getEmail());
 			userResponseModal.setGender(user.getGender());
 			userResponseModal.setDob(user.getDob());
+			userResponseModal.setProfileImage(user.getProfileImage());
 			userResponseModal.setIsDeleted(user.getIsDeleted());
 			
 			List<RoleResponseModal> roleResponseModals = new ArrayList<>();
@@ -59,7 +60,7 @@ public class LocationEntityToModalConverter {
 		return locationWithUserResponseModal;
 		
 	}
-	public LocationWithTripResponseModal findBy(Location location) {
+	public LocationWithTripResponseModal findTripByLocation(Location location) {
 		LocationWithTripResponseModal locationWithTripResponseModal = new LocationWithTripResponseModal();
 		locationWithTripResponseModal.setId(location.getId());
 		locationWithTripResponseModal.setName(location.getName());

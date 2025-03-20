@@ -1,26 +1,31 @@
 package com.amstech.tripplanner.booking.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.amstech.tripplanner.booking.modal.request.TripCreateRequestModal;
 import com.amstech.tripplanner.booking.modal.response.LocationWithTripResponseModal;
 import com.amstech.tripplanner.booking.modal.response.TripDetailResponseModal;
 import com.amstech.tripplanner.booking.modal.response.TripResponseModal;
 import com.amstech.tripplanner.booking.response.RestResponse;
+import com.amstech.tripplanner.booking.service.FileService;
 import com.amstech.tripplanner.booking.service.TripService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @RestController
@@ -31,79 +36,93 @@ public class TripController {
 
 	@Autowired
 	private TripService tripService;
+	@Autowired
+	private ObjectMapper objectMapper;
+	@Autowired
+	private FileService fileService;
 
 	public TripController() {
 
 		LOGGER.info("TripController : Object Created");
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/create", consumes = "application/json",produces = "application/json")
-	public RestResponse create(@RequestBody TripCreateRequestModal tripCreateRequestModal) {
-
-		LOGGER.info("Creating Trip with name : " + tripCreateRequestModal.getName());
+	@RequestMapping(method = RequestMethod.POST, value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,produces = "application/json")
+	public RestResponse create(@RequestParam("tripCreateJson") String tripCreateJson,@RequestParam("image") MultipartFile image) throws IOException {
+		String filePath = null;
 		try {
+			TripCreateRequestModal tripCreateRequestModal = objectMapper.readValue(tripCreateJson,TripCreateRequestModal.class);
+			LOGGER.info("Creating Trip with name : " + tripCreateRequestModal.getName());
+			
+			if(image != null) {
+				LOGGER.info("File Name : "+ image.getOriginalFilename() + " and Size : " + image.getSize() );
+				if(image.getSize() > fileService.getFileMaxSize()) {
+					throw new Exception(" File Size Can Not Greater Than : " + fileService.getFileMaxSize() + " bytes");
+				}
+				filePath = fileService.saveFile(image.getBytes(),"trip",FilenameUtils.getExtension(image.getOriginalFilename()));
+			}
+			
+			tripCreateRequestModal.setUrl(filePath);
 			LocationWithTripResponseModal locationWithTripResponseModal = tripService.create(tripCreateRequestModal);
 			return RestResponse.build().withSuccess("SuccessFully Create trip",locationWithTripResponseModal);
 		} catch (Exception e) {
-			e.printStackTrace();
+			FileUtils.delete(new File(filePath));
 			LOGGER.error("Failed to Fetching All Trips Availables due to : {}", e.getMessage(), e);
 			return RestResponse.build().withError("Failed to Create Trip due to : " + e.getMessage());
 		}
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/all", produces = "application/json")
-	public ResponseEntity<Object> findAll() {
+	public RestResponse findAll(@RequestParam("page") Integer page, @RequestParam("size") Integer size) {
 
 		LOGGER.info("Fetching All Trips Available");
 		try {
-			List<TripResponseModal> tripResponseModals = tripService.findAllContinue();
-			return new ResponseEntity<Object>(tripResponseModals, HttpStatus.OK);
+			List<TripResponseModal> tripResponseModals = tripService.findAllContinue(page, size);
+			long totalRecords = tripService.countAllContinue();
+			return RestResponse.build().withSuccess("Trip Founds").withTotalRecords(totalRecords)
+					.withPageNumber(page).withPageSize(size).withData(tripResponseModals);
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.error("Failed to Fetching All Trips Availables due to : {}", e.getMessage(), e);
-			return new ResponseEntity<Object>("Failed to Fetching All Trips Availables due to : " + e.getMessage(),
-					HttpStatus.INTERNAL_SERVER_ERROR);
+			return RestResponse.build().withError("Failed to Fetching All Trips Availables due to : " + e.getMessage());
 		}
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/byid", produces = "application/json")
-	public ResponseEntity<Object> findById(@RequestParam("id") Integer id) {
+	public RestResponse findById(@RequestParam("id") Integer id) {
 
 		LOGGER.info("Fetching Details of Trip with id : {}", id);
 		try {
 			TripDetailResponseModal tripResponseModal = tripService.findById(id);
-			return new ResponseEntity<Object>(tripResponseModal, HttpStatus.OK);
+			return RestResponse.build().withSuccess("Trip founds",tripResponseModal);
 		} catch (Exception e) {
-			e.printStackTrace();
 			LOGGER.error("Failed to Fetching Details of Trip with id due to : {}", e.getMessage(), e);
-			return new ResponseEntity<Object>("Failed to Fetching Details of Trip with id due to : " + e.getMessage(),
-					HttpStatus.INTERNAL_SERVER_ERROR);
+			return RestResponse.build().withError("Failed to Fetching Details of Trip with id due to : " + e.getMessage());
 		}
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/search", produces = "application/json")
-	public ResponseEntity<Object> SearchByName(@RequestParam("name") String name) {
+	public RestResponse SearchByName(@RequestParam("name") String name,@RequestParam("page") Integer page, @RequestParam("size") Integer size) {
 		LOGGER.info("fetching trip data by name : {}" , name);
 		try {
-			List<TripResponseModal> tripResponseModal = tripService.findByName(name);
-			return new ResponseEntity<Object>(tripResponseModal, HttpStatus.OK);
+			List<TripResponseModal> tripResponseModals = tripService.findByName(name, page, size);
+			long totalRecords = tripService.countByName(name);
+			return RestResponse.build().withSuccess("Trip Founds").withTotalRecords(totalRecords)
+					.withPageNumber(page).withPageSize(size).withData(tripResponseModals);
 		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<Object>("Failed to fetch trip due to " + e.getMessage(),
-					HttpStatus.INTERNAL_SERVER_ERROR);
+			LOGGER.error("Failed to Fetching Details of Trip with id due to : {}", e.getMessage(), e);
+			return RestResponse.build().withError("Failed to Fetching Details of Trip with id due to : " + e.getMessage());
 		}
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/updateStatus", produces = "application/json")
-	public ResponseEntity<Object> toggleTripStatus(@RequestParam("id") Integer id) {
+	public RestResponse toggleTripStatus(@RequestParam("id") Integer id) {
 		LOGGER.info("Updateing trip Status by statusId : {}" , id);
 		try {
-			String tripStatus = tripService.toggleTripStatus(id);
-			return new ResponseEntity<Object>("SuccessFully Update the the status of tripid"+ id +" is " + tripStatus,HttpStatus.OK);
+			TripDetailResponseModal tripreDetailResponseModal = tripService.toggleTripStatus(id);
+			return RestResponse.build().withSuccess("Successufully Update status of trip", tripreDetailResponseModal);
 		} catch (Exception e) {
-			e.printStackTrace();
 			LOGGER.error("Failed to update status due to : {}", e.getMessage(), e);
-			return new ResponseEntity<Object>("Failed to update status due to "+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+			return RestResponse.build().withError("Failed to update status due to : " +  e.getMessage());
 		}
 		
 	}

@@ -12,6 +12,7 @@ public class UserResponseModal {
 	private String phoneNumber;
 	private String gender;
 	private Date dob;
+	private String profileImage;
 	private int isDeleted;
 	private List<RoleResponseModal> roles;
 
