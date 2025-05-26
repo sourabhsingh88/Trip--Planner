@@ -1,0 +1,1 @@
+package com.amstech.tripplanner.booking.security.model;

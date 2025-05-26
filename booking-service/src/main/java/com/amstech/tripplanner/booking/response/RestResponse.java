@@ -168,6 +168,7 @@ public class RestResponse implements Map<String, Object>{
 	public static RestResponse missingParam(String param) {
 		return new RestResponse().withError("Param " + param + " is missing");
 	}
+	
 
 		@Override
 	public int size() {

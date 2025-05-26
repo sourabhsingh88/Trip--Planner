@@ -1,7 +1,10 @@
 package com.amstech.tripplanner.booking.controller;
 
 import java.io.File;
+
 import java.io.IOException;
+import java.sql.Array;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -23,9 +26,13 @@ import com.amstech.tripplanner.booking.modal.request.UserUpdateRequestModel;
 import com.amstech.tripplanner.booking.modal.response.LocationWithUserResponseModal;
 import com.amstech.tripplanner.booking.modal.response.UserResponseModal;
 import com.amstech.tripplanner.booking.response.RestResponse;
+import com.amstech.tripplanner.booking.security.TokenProvider;
 import com.amstech.tripplanner.booking.service.FileService;
 import com.amstech.tripplanner.booking.service.Userservice;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletResponse;
 
 
 @RestController
@@ -34,6 +41,8 @@ public class UserController {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
+	@Autowired
+	private TokenProvider tokenProvider;
 	@Autowired
 	private Userservice userservice;
 	@Autowired
@@ -86,13 +95,17 @@ public class UserController {
 			return RestResponse.build().withError("Failed to Update User Basic Details due to : " + e.getMessage());
 		}
 	}
-
+ 
+	@Operation(summary = "Admin Login Endpoint", description = "Authenticates an admin based on Email and Password.")
 	@RequestMapping(method = RequestMethod.POST, value = "/login", consumes = "application/json", produces = "application/json")
-	public RestResponse login(@RequestBody UserLoginRequestModal userLoginRequestModal) {
+	public RestResponse login(@RequestBody UserLoginRequestModal userLoginRequestModal,HttpServletResponse httpServletResponse) {
 		LOGGER.info("start login with username : {} ", userLoginRequestModal.getUserName());
 		try {
 			UserResponseModal userResponseModal = userservice.login(userLoginRequestModal);
 			LOGGER.info("User Response Modal Reseived");
+			
+			tokenProvider.generateToken( userResponseModal.getName(),"Dont Know", userResponseModal.getEmail(),
+					userResponseModal.getId(),null, httpServletResponse);
 			return RestResponse.build().withSuccess("User Login Successfull", userResponseModal);
 		} catch (Exception e) {
 			LOGGER.error("Failed To Login due to  : {} ", e.getMessage(), e);
@@ -115,7 +128,7 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.DELETE, value = "/softDelete")
 	public RestResponse softDelete(@RequestParam("id") Integer id) {
 		LOGGER.info("Start Deleting user detail with id: {} ", id);
-		try {
+		try {  
 			userservice.softDeletedId(id);
 			return RestResponse.build().withSuccess("Successfully Deactivate thre user");
 		} catch (Exception e) {
@@ -136,7 +149,7 @@ public class UserController {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/updatePhoneNumber", consumes = "application/json", produces = "application/json")
+	@RequestMapping(method = RequestMethod.PUT,   value = "/updatePhoneNumber", consumes = "application/json", produces = "application/json")
 	public RestResponse updatePhoneNumber(@RequestBody UserUpdatePhoneNumberRequestModal updatePhoneNumberModal) {
 		LOGGER.info("Updating user detail with id: {} ", updatePhoneNumberModal.getId());
 		try {
@@ -166,7 +179,7 @@ public class UserController {
 		try {
 			List<UserResponseModal> userResponseModals = userservice.findAllActive(page, size);
 			long totalRecords = userservice.countAllActive();
-			return RestResponse.build().withSuccess("Active User Founds").withTotalRecords(totalRecords)
+			return RestResponse.build().withSu  ccess("Active User Founds").withTotalRecords(totalRecords)
 					.withPageNumber(page).withPageSize(size).withData(userResponseModals);
 		} catch (Exception e) {
 			LOGGER.error("Failed To Find Active User due to  : {} ", e.getMessage(), e);
