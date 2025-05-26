@@ -1,0 +1,382 @@
+MAVAN ------ Apache Maven is an open-source tool that helps build, manage, and publish Java projects.
+
+
+working ---- 1.Uses the Project Object Model (POM)
+			 2.Automatically downloads project JARs, libraries, and other files
+			 3.Integrates with source control systems like Git
+			 4.Promotes the use of a centralized repository for JARs and other dependencies
+			 
+			 
+Uses ------- 1.Build Automation ----- Automatically compiles source code, manages dependencies, and assembles binary codes into packages 
+			 2.Project management --- Handles team collaboration, reporting, documentation, distribution publication, and release managemen
+			 3.Project information -- Provides quality project information, including regular reporting on the project's development status 
+
+POM --- It is a xml file which contains information about project(structure) and its configuration	 
+			 
+01 - first we install a Mevan software
+
+02 - create a mevan project with skip simple project check
+			 group-id ------ name fo company
+			 Artifact-id --- name of project
+			 version ------- (Snapshot , Beta , Realeased)
+			 packaging ----- jar - that file run directly
+							 war - need server for run
+							 pom - project object modal
+			 Name ---------- Artifact-id		
+			 Description --- description of project
+	 
+03(A) - add basic Repository from Mevan Repository		
+			*Untitled - Notepad
+			File Edit Format View Help
+			1. spring-jdbc - org. springframework
+			2. spring-context - org. springframework
+			3. spring-beans - org. springframework
+			4. spring-web - org. springframework
+			5. spring-webmvc - org. springframework
+			6. spring-test - org. springframework
+			7. spring-data-jpa - org. springframework. data
+			8. spring-security-oauth2 - org.springframework.security.oauth
+			9. hibernate-validator - org. hibernate
+			10. hibernate-core - org. hibernate
+			11. hibernate-entitymanager - org. hibernate
+			12. hibernate-jpa-2.1-api - org.hibernate.javax.persistence
+			13. s1f4j-10g4j12 - org. slf4j
+			14. modelmapper - org. modelmapper
+			15. mysql-connector-java - mysql
+			16. junit - junit
+			17. servlet-api - javax.servlet
+			18. javax. servlet-api - javax.servlet/
+			19. javax.servlet.jsp-api - javax.servlet.jsp
+			20. validation-api - javax. validation
+			21. commons-lang - commons-lang
+			22. commons-io - commons-io
+			23. commons-fileupload - commons-fileupload
+			24. jackson-datatype-hibernate4 - com. fasterxml.jackson.data
+			25. jackson-core - com.fasterxml.jackson.core
+			26. jackson-datatype-joda - com. fasterml. jackson.datatype
+			27. json - org. json
+			28. jstl - jstl
+			29. java-jwt - com. authe
+			30.jiwt - in. isonwehtoken
+03(B) - Basics Dependesies
+			
+			
+			<properties>
+				<springframework.version>4.3.10.RELEASE</springframework.version>
+				<hibernate.version>5.2.10.Final</hibernate.version>
+				<mysql.connector.version>8.0.28</mysql.connector.version>
+			</properties>
+			<repositories>
+				<repository>
+					<id>repository.springframework.maven.release</id>
+					<name>Spring Framework Maven Release Repository</name>
+					<url>http://repo.springsource.org/libs-release</url>
+				</repository>
+			</repositories>
+			<dependencies>
+				<!-- springframework -->
+				<dependency>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-jdbc</artifactId>
+					<version>${springframework.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-context</artifactId>
+					<version>${springframework.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-beans</artifactId>
+					<version>${springframework.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-web</artifactId>
+					<version>${springframework.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-webmvc</artifactId>
+					<version>${springframework.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-test</artifactId>
+					<version>${springframework.version}</version>
+					<scope>compile</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.springframework.data</groupId>
+					<artifactId>spring-data-jpa</artifactId>
+					<version>1.11.6.RELEASE</version>
+				</dependency>
+				<dependency>
+					<groupId>org.springframework.security.oauth</groupId>
+					<artifactId>spring-security-oauth2</artifactId>
+					<version>2.0.12.RELEASE</version>
+				</dependency>
+
+				<!-- hibernate -->
+				<dependency>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-validator</artifactId>
+					<version>5.4.1.Final</version>
+				</dependency>
+				<dependency>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-core</artifactId>
+					<version>${hibernate.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-entitymanager</artifactId>
+					<version>${hibernate.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>org.hibernate.javax.persistence</groupId>
+					<artifactId>hibernate-jpa-2.1-api</artifactId>
+					<version>1.0.0.Final</version>
+				</dependency>
+
+				<!-- slf4j logging -->
+				<dependency>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+					<version>1.7.25</version>
+				</dependency>
+
+				<!-- modelmapper -->
+				<dependency>
+					<groupId>org.modelmapper</groupId>
+					<artifactId>modelmapper</artifactId>
+					<version>0.7.5</version>
+				</dependency>
+
+				<!-- mysql -->
+				<dependency>
+					<groupId>mysql</groupId>
+					<artifactId>mysql-connector-java</artifactId>
+					<version>${mysql.connector.version}</version>
+				</dependency>
+
+				<dependency>
+					<groupId>com.mchange</groupId>
+					<artifactId>c3p0</artifactId>
+					<version>0.9.5</version>
+				</dependency>
+
+				<dependency>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-c3p0</artifactId>
+					<version>4.2.0.Final</version>
+					<exclusions>
+						<exclusion>
+							<artifactId>c3p0</artifactId>
+							<groupId>c3p0</groupId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+
+				<!-- junit -->
+				<dependency>
+					<groupId>junit</groupId>
+					<artifactId>junit</artifactId>
+					<version>4.9</version>
+					<scope>compile</scope>
+				</dependency>
+
+				<!-- javax -->
+				<dependency>
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>
+					<version>2.5</version>
+				</dependency>
+				<dependency>
+					<groupId>javax.servlet</groupId>
+					<artifactId>javax.servlet-api</artifactId>
+					<version>3.1.0</version>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>javax.servlet.jsp</groupId>
+					<artifactId>javax.servlet.jsp-api</artifactId>
+					<version>2.3.1</version>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>javax.validation</groupId>
+					<artifactId>validation-api</artifactId>
+					<version>1.1.0.Final</version>
+				</dependency>
+
+				<!-- commons -->
+				<dependency>
+					<groupId>commons-lang</groupId>
+					<artifactId>commons-lang</artifactId>
+					<version>2.6</version>
+				</dependency>
+				<dependency>
+					<groupId>commons-io</groupId>
+					<artifactId>commons-io</artifactId>
+					<version>2.5</version>
+				</dependency>
+				<dependency>
+					<groupId>commons-fileupload</groupId>
+					<artifactId>commons-fileupload</artifactId>
+					<version>1.2</version>
+				</dependency>
+
+				<!-- fasterxml -->
+				<dependency>
+					<groupId>com.fasterxml.jackson.datatype</groupId>
+					<artifactId>jackson-datatype-hibernate4</artifactId>
+					<version>2.5.2</version>
+				</dependency>
+				<dependency>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-core</artifactId>
+					<version>2.5.2</version>
+				</dependency>
+				<dependency>
+					<groupId>com.fasterxml.jackson.datatype</groupId>
+					<artifactId>jackson-datatype-joda</artifactId>
+					<version>2.5.2</version>
+				</dependency>
+
+				<!-- json -->
+				<dependency>
+					<groupId>org.json</groupId>
+					<artifactId>json</artifactId>
+					<version>20140107</version>
+				</dependency>
+
+				<!-- auth0 and token -->
+				<dependency>
+					<groupId>jstl</groupId>
+					<artifactId>jstl</artifactId>
+					<version>1.2</version>
+				</dependency>
+				<dependency>
+					<groupId>com.auth0</groupId>
+					<artifactId>java-jwt</artifactId>
+					<version>3.1.0</version>
+				</dependency>
+
+				<dependency>
+					<groupId>io.jsonwebtoken</groupId>
+					<artifactId>jjwt</artifactId>
+					<version>0.7.0</version>
+				</dependency>
+
+				<!-- poi -->
+
+				<dependency>
+					<groupId>org.apache.poi</groupId>
+					<artifactId>poi</artifactId>
+					<version>3.16</version>
+				</dependency>
+
+				<dependency>
+					<groupId>org.apache.poi</groupId>
+					<artifactId>poi-ooxml</artifactId>
+					<version>3.16</version>
+				</dependency>
+
+				<!-- Email -->
+				<dependency>
+					<groupId>com.sun.mail</groupId>
+					<artifactId>javax.mail</artifactId>
+					<version>1.6.0</version>
+				</dependency>
+
+				<dependency>
+					<groupId>com.opencsv</groupId>
+					<artifactId>opencsv</artifactId>
+					<version>3.8</version>
+				</dependency>
+
+				<dependency>
+					<groupId>com.google.code.gson</groupId>
+					<artifactId>gson</artifactId>
+					<version>2.8.0</version>
+				</dependency>
+
+				<dependency>
+					<groupId>org.apache.httpcomponents</groupId>
+					<artifactId>httpclient</artifactId>
+					<version>4.5.3</version>
+				</dependency>
+
+			</dependencies>
+	
+	
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<source>11</source>
+							<target>11</target>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<webXml>WebContent/WEB-INF/web.xml</webXml>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+
+			
+			
+			
+			
+04 - repository has a three type
+			1.Local Repository
+			2.Remote Repository
+			3.Central Repository
+
+05 - add main method in mevan project
+
+06 - Mevan Cammand:- to create jar file on target through cmd
+			1.mvn --version
+			2.mvn clean install
+			3.mvn clean package
+
+07 - run jar file on cmd	
+			1.add code in pom file according to your package.
+					<build>
+						<plugins>
+							<plugin>
+								<groupId>org.apache.maven.plugins</groupId>
+								<artifactId>maven-jar-plugin</artifactId>
+								<version>3.3.0</version>
+								<configuration>
+									<archive>
+										<manifest>
+											<mainClass>com.amstech.collage.erp.test.impl.Main</mainClass>
+										</manifest>
+									</archive>
+								</configuration>
+							</plugin>
+						</plugins>
+					</build>
+					
+			  2.now again create jar file
+					"mvn clean package"
+					
+			  3.go on target directory
+					"cd target"
+					
+			  4.run jar
+					"java -jar collage-erp-0.0.1-SNAPSHOT.jar" 
+
+08 - create maven module 
+			 ctrl+n >> maven module 
+	
+09 - first create your maven project dynamic and add web.xml file
+			 right click on project >> properties >> project factes >> check dyanamic web module >> click bottom link >> add web.xml file >> finish

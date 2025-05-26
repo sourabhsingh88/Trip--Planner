@@ -3,11 +3,13 @@ package com.amstech.tripplanner.booking.service;
 import java.util.List;
 
 
+
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,7 @@ import com.amstech.tripplanner.booking.modal.response.LocationWithUserResponseMo
 import com.amstech.tripplanner.booking.modal.response.UserResponseModal;
 import com.amstech.tripplanner.booking.repo.LocationRepo;
 import com.amstech.tripplanner.booking.repo.UserRepo;
+import com.amstech.tripplanner.booking.repo.custom.UserCustomRepo;
 
 @Service
 public class Userservice {
@@ -42,6 +45,11 @@ public class Userservice {
 	
 	@Autowired
 	private LocationEntityToModalConverter locationEntityToModalConverter;
+	
+	@Autowired
+	@Qualifier("userCustomImplRepo")
+//	@Qualifier("UserCriteriaImplRepo")
+	private UserCustomRepo userCustomRepo;
 
 	public Userservice() {
 		LOGGER.debug("Userservice : Object Created");
@@ -170,5 +178,16 @@ public class Userservice {
 			throw new Exception("No Deactive User Available");
 		}
 		return countActiveUser;
+	}
+	
+	public List<UserResponseModal> filterBy(Integer page, Integer size, String phoneNumber, Integer locationId, String gender,
+			Long dobStartDate, Long dobEndDate, List<Integer> roleIds, Integer status, String keyword) throws Exception{
+		List<User> users = userCustomRepo.filterBy(page, size, phoneNumber, locationId, gender, dobStartDate, dobEndDate, roleIds, status, keyword);
+		return userEntityToModalConverter.findAll(users);
+	}
+	
+	public long countBy( String phoneNumber, Integer locationId, String gender,
+			Long dobStartDate, Long dobEndDate, List<Integer> roleIds, Integer status, String keyword) throws Exception {
+		return userCustomRepo.countBy(phoneNumber, locationId, gender, dobStartDate, dobEndDate, roleIds, status, keyword);
 	}
 }

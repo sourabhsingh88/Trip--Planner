@@ -1,6 +1,7 @@
 package com.amstech.tripplanner.booking.service;
 
 import java.io.File;
+
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.UUID;
@@ -36,11 +37,13 @@ public class FileService {
 	public void init() {
 
 		log.info("Init File Service");
+		
 		File file = new File(BASE_REPO_DIRECTORY_PATH);
+		
 		if (!file.exists()) {
-
 			try {
 				log.info("Base Repo Does Not Exist ... Createing New Repo");
+				
 				if (file.mkdir()) {
 					log.info("Base Repo SuccessFull Create");
 				}
@@ -57,8 +60,11 @@ public class FileService {
 	}
 	
 	public String saveFile(byte[] date,String directoryName,String fileExt) throws IOException {
+		
 		String filePath = MessageFormat.format(FILE_PATH_FORMAT,BASE_REPO_DIRECTORY_PATH,directoryName,UUID.randomUUID().toString(),fileExt);
+		
 		FileUtils.writeByteArrayToFile(new File(filePath), date);
+		
 		log.info("File Path : {} ", filePath);
 		return filePath;
 	}

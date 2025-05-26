@@ -24,6 +24,6 @@ public class TripCreateRequestModal {
 	private List<ActivityCreateRequestModal> activityCreateRequestModals;
 	private List<MealCreateRequestModal> mealCreateRequestModals;
 	private List<TransportCreateRequestModal> transportCreateRequestModals;
-//	private List<TripBannerCreateRequestModal> tripBannerCreateRequestModals;
+	private List<String> tripBanners;
 	
 }
