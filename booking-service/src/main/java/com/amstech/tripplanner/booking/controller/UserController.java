@@ -1,6 +1,7 @@
 package com.amstech.tripplanner.booking.controller;
 
 import java.io.File;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -45,10 +46,26 @@ public class UserController {
 		LOGGER.info("User Controller : object Created ");
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/signUp", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json")
-	public RestResponse singup(@RequestParam("userRequestModalJson") String userRequestModalJson,@RequestParam("profilePhoto") MultipartFile profilePhoto) throws IOException {
-		String filePath = null;
+	@RequestMapping(method = RequestMethod.POST, value = "/signup", consumes = "application/json", produces = "application/json")
+	public RestResponse singup(@RequestBody UserSignUpRequestModel userSignUpRequestModel) throws IOException {
+		
+		try {
+			LOGGER.info("Start Creating User Account with email : {} ", userSignUpRequestModel.getEmail());
+//			userSignUpRequestModel.setProfieImage(filePath);
+			LOGGER.info("cdnskndkn");
+			LocationWithUserResponseModal locationWithUserResponseModal = userservice.signup(userSignUpRequestModel);
+			LOGGER.info("User Response Modal Reseived");
+			return RestResponse.build().withSuccess("User Account Created Successfully", locationWithUserResponseModal);
+		} catch (Exception e) {
+			LOGGER.error("Failed to save user due to : {}", e.getMessage(), e);
+			return RestResponse.build().withError("Failed to save user due to : " + e.getMessage());
+		}
+	}
 
+	@RequestMapping(method = RequestMethod.POST, value = "/multiPartSignup", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json")
+	public RestResponse multiPartSingup(@RequestParam("userRequestModalJson") String userRequestModalJson,@RequestParam("profilePhoto") MultipartFile profilePhoto) throws IOException {
+		String filePath = null;
+ 
 		try {
 
 			UserSignUpRequestModel userSignUpRequestModel = objectMapper.readValue(userRequestModalJson,UserSignUpRequestModel.class);
@@ -56,9 +73,11 @@ public class UserController {
 			
 			if(profilePhoto != null) {
 				LOGGER.info("File Name : "+ profilePhoto.getOriginalFilename() + " and Size : " + profilePhoto.getSize() );
+				
 				if(profilePhoto.getSize() > fileService.getFileMaxSize()) {
 					throw new Exception(" File Size Can Not Greater Than : " + fileService.getFileMaxSize() + " bytes");
 				}
+				
 				filePath = fileService.saveFile(profilePhoto.getBytes(),"user",FilenameUtils.getExtension(profilePhoto.getOriginalFilename()));
 			}
 			
@@ -99,6 +118,7 @@ public class UserController {
 			return RestResponse.build().withError("Failed To Login due to  : " + e.getMessage());
 		}
 	}
+	
 
 	@RequestMapping(method = RequestMethod.GET, value = "/byId", produces = "application/json")
 	public RestResponse findById(@RequestParam("id") Integer id) {
@@ -185,6 +205,31 @@ public class UserController {
 		} catch (Exception e) {
 			LOGGER.error("Failed To Find Deactive User due to  : {} ", e.getMessage(), e);
 			return RestResponse.build().withError("Failed To Find Deactive User due to" + e.getMessage());
+		}
+	}
+	@RequestMapping(method = RequestMethod.GET, value = "/filterBy", produces = "application/json")
+	public RestResponse filterBy(
+			@RequestParam(value = "page", required = true) Integer page,
+			@RequestParam(value = "size", required = true) Integer size,
+			@RequestParam(value = "phoneNumber", required = false) String phoneNumber,
+			@RequestParam(value = "locatiionId", required = false) Integer locatiionId,
+			@RequestParam(value = "gender", required = false) String gender,
+			@RequestParam(value = "dobStartDate", required = false) Long dobStartDate,
+			@RequestParam(value = "dobEndDate", required = false) Long dobEndDate,
+			@RequestParam(value = "roleIds", required = false) List<Integer> roleIds,
+			@RequestParam(value = "status", required = false) Integer status,
+			@RequestParam(value = "keyword", required = false) String keyword) {
+		LOGGER.info(
+				"Fetching user by fillter page: {}, size: {}, mobileNumber: {}, locatiionId: {}, gender: {}, dobStartDate: {}, dobEndDate: {}, roleIds: {}, status: {}, keyword: {}",
+				page, size, phoneNumber, locatiionId, gender, dobStartDate, dobEndDate, roleIds, status, keyword);
+		try {
+			List<UserResponseModal> userResponseModels = userservice.filterBy(page, size, phoneNumber, locatiionId, gender, dobStartDate, dobEndDate, roleIds, status, keyword);
+			long totalRecord = userservice.countBy(phoneNumber, locatiionId, gender, dobStartDate, dobEndDate, roleIds, status, keyword);
+			return RestResponse.build().withSuccess("User list found successfully").withTotalRecords(totalRecord)
+					.withPageNumber(page).withPageSize(size).withData(userResponseModels);
+		} catch ( Exception e) {
+			LOGGER.error("Failed to find user list due to: {}", e.getMessage(), e);
+			return RestResponse.build().withError(e.getMessage());
 		}
 	}
 }

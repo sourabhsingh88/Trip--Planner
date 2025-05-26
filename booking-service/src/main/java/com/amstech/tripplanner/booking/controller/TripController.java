@@ -2,6 +2,7 @@ package com.amstech.tripplanner.booking.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -47,8 +48,13 @@ public class TripController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,produces = "application/json")
-	public RestResponse create(@RequestParam("tripCreateJson") String tripCreateJson,@RequestParam("image") MultipartFile image) throws IOException {
+	public RestResponse create(
+			@RequestParam("tripCreateJson") String tripCreateJson,
+			@RequestParam("image") MultipartFile image,
+			@RequestParam("tripBanner") List<MultipartFile> tripBanners) throws IOException {
 		String filePath = null;
+		List<String> tripBannerPath = new ArrayList<>();
+		
 		try {
 			TripCreateRequestModal tripCreateRequestModal = objectMapper.readValue(tripCreateJson,TripCreateRequestModal.class);
 			LOGGER.info("Creating Trip with name : " + tripCreateRequestModal.getName());
@@ -61,6 +67,21 @@ public class TripController {
 				filePath = fileService.saveFile(image.getBytes(),"trip",FilenameUtils.getExtension(image.getOriginalFilename()));
 			}
 			
+			if (tripBanners != null) {
+
+				for (MultipartFile tripBanner : tripBanners) {
+					LOGGER.info("File name: {} with file size: {} byts", tripBanner.getOriginalFilename(),tripBanner.getSize());
+					if (tripBanner.getSize() > fileService.getFileMaxSize())
+						throw new Exception(
+								"File size can not be gretter then: " + fileService.getFileMaxSize() + "byts");
+
+					tripBannerPath.add(fileService.saveFile(tripBanner.getBytes(), "users",FilenameUtils.getExtension(tripBanner.getOriginalFilename())));
+
+				}
+				
+
+			}
+			tripCreateRequestModal.setTripBanners(tripBannerPath);
 			tripCreateRequestModal.setUrl(filePath);
 			LocationWithTripResponseModal locationWithTripResponseModal = tripService.create(tripCreateRequestModal);
 			return RestResponse.build().withSuccess("SuccessFully Create trip",locationWithTripResponseModal);

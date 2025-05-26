@@ -44,6 +44,7 @@ public class UserModelToEntityConverter {
 		if(!cityOptional.isPresent()) {
 			throw new Exception("City Is not Available with id : " +userSignUpRequestModel.getCityId());
 		}
+		
 		Optional<Role> roleOptional = roleRepo.findById(customerId);
 		if(!roleOptional.isPresent()) {
 			throw new Exception("Role Is Not Available With Id : " + customerId);
@@ -68,6 +69,7 @@ public class UserModelToEntityConverter {
 		location.setUsers(List.of(user));
 		
 		UserRole userRole = new UserRole();
+		
 		userRole.setRole(roleOptional.get());
 		
 		userRole.setUser(user);

@@ -16,6 +16,7 @@ import com.amstech.tripplanner.booking.entity.Meal;
 import com.amstech.tripplanner.booking.entity.Status;
 import com.amstech.tripplanner.booking.entity.Transport;
 import com.amstech.tripplanner.booking.entity.Trip;
+import com.amstech.tripplanner.booking.entity.TripBanner;
 import com.amstech.tripplanner.booking.entity.TripPlanner;
 import com.amstech.tripplanner.booking.modal.request.AccommodationCreateRequestModal;
 import com.amstech.tripplanner.booking.modal.request.ActivityCreateRequestModal;
@@ -118,6 +119,15 @@ public class TripModalToEntityConverter {
 			transports.add(transport);
 		}
 		trip.setTransports(transports);
+		
+		List<TripBanner> tripBanners= new ArrayList<>();
+		for (String tripBannerPath : tripCreateRequestModal.getTripBanners()) {
+			TripBanner tripBanner = new TripBanner();
+			tripBanner.setUrl(tripBannerPath);
+			tripBanner.setTrip(trip);
+			tripBanners.add(tripBanner);
+		}
+		trip.setTripBanners(tripBanners);
 		
 		trip.setLocation(location);
 		location.setTrips(List.of(trip));
