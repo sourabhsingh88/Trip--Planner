@@ -23,6 +23,7 @@ import com.amstech.tripplanner.booking.modal.request.TripCreateRequestModal;
 import com.amstech.tripplanner.booking.modal.response.LocationWithTripResponseModal;
 import com.amstech.tripplanner.booking.modal.response.TripDetailResponseModal;
 import com.amstech.tripplanner.booking.modal.response.TripResponseModal;
+import com.amstech.tripplanner.booking.modal.response.UserResponseModal;
 import com.amstech.tripplanner.booking.response.RestResponse;
 import com.amstech.tripplanner.booking.service.FileService;
 import com.amstech.tripplanner.booking.service.TripService;
@@ -146,5 +147,28 @@ public class TripController {
 			return RestResponse.build().withError("Failed to update status due to : " +  e.getMessage());
 		}
 		
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/filterBy", produces = "application/json")
+	public RestResponse filterBy(
+			@RequestParam(value = "page", required = true) Integer page,
+			@RequestParam(value = "size", required = true) Integer size,
+			@RequestParam(value = "to", required = false) String to,
+			@RequestParam(value = "from", required = false) String from,
+			@RequestParam(value = "duration", required = false) Integer duration,
+			@RequestParam(value = "price", required = false) Integer price,
+			@RequestParam(value = "keyword", required = false) String keyword) {
+		LOGGER.info(
+				"Fetching user by fillter page: {}, size: {}, to: {}, from: {}, gender: {}, duration: {}, price: {}, keyword: {}",
+				page, size, to, from, duration, price, keyword);
+		try {
+			List<TripResponseModal> tripResponseModals = tripService.filterBy(page, size, to, from, duration, price, keyword);
+			long totalRecord = tripService.countBy(to, from, duration, price, keyword);
+			return RestResponse.build().withSuccess("Trip list found successfully").withTotalRecords(totalRecord)
+					.withPageNumber(page).withPageSize(size).withData(tripResponseModals);
+		} catch ( Exception e) {
+			LOGGER.error("Failed to find Trip list due to: {}", e.getMessage(), e);
+			return RestResponse.build().withError(e.getMessage());
+		}
 	}
 }

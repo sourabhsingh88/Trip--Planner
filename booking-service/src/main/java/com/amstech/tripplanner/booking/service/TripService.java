@@ -5,13 +5,16 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import com.amstech.tripplanner.booking.entity.Trip;
+import com.amstech.tripplanner.booking.entity.User;
 import com.amstech.tripplanner.booking.modal.request.TripCreateRequestModal;
 import com.amstech.tripplanner.booking.modal.response.LocationWithTripResponseModal;
 import com.amstech.tripplanner.booking.modal.response.TripDetailResponseModal;
 import com.amstech.tripplanner.booking.modal.response.TripResponseModal;
+import com.amstech.tripplanner.booking.modal.response.UserResponseModal;
 import com.amstech.tripplanner.booking.converter.entity.TripModalToEntityConverter;
 import com.amstech.tripplanner.booking.converter.modal.LocationEntityToModalConverter;
 import com.amstech.tripplanner.booking.converter.modal.TripEntityToModalConverter;
@@ -20,6 +23,8 @@ import com.amstech.tripplanner.booking.entity.Status;
 import com.amstech.tripplanner.booking.repo.LocationRepo;
 import com.amstech.tripplanner.booking.repo.StatusRepo;
 import com.amstech.tripplanner.booking.repo.TripRepo;
+import com.amstech.tripplanner.booking.repo.custom.TripCustomRepo;
+import com.amstech.tripplanner.booking.repo.custom.UserCustomRepo;
 
 @Service
 public class TripService {  
@@ -38,6 +43,10 @@ public class TripService {
 	private TripModalToEntityConverter tripModalToEntityConverter;
 	@Autowired 
 	private LocationEntityToModalConverter locationEntityToModalConverter;
+	
+	@Autowired
+	@Qualifier("tripCustomImplRepo")
+	private TripCustomRepo tripCustomRepo;
 
 	private Integer continueStatusId = 9;
 	private Integer disContinueStatusId = 10;
@@ -81,6 +90,7 @@ public class TripService {
 	}
 
 	public List<TripResponseModal> findByName(String name,Integer page, Integer size) throws Exception {
+		
 		List<Trip> trips = tripRepo.searchBy(name, continueStatusId,PageRequest.of(page, size));
 
 		if (trips.isEmpty()) {
@@ -118,5 +128,15 @@ public class TripService {
 			Trip updateTrip = tripRepo.save(trip);
 			return tripEntityToModalConverter.findById(updateTrip);
 		} 
+	
+	public List<TripResponseModal> filterBy(Integer page, Integer size, String to, String from, Integer duration, Integer price,  String keyword) throws Exception{
+		List<Trip> trips = tripCustomRepo.filterBy(page, size, to, from, duration, price, keyword);
+		return tripEntityToModalConverter.findAll(trips);
 	}
+	
+	public long countBy( String to, String from, Integer duration, Integer price,  String keyword) throws Exception {
+		return tripCustomRepo.countBy(to, from, duration, price, keyword);
+	}
+	}
+
 

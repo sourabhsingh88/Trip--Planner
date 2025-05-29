@@ -20,11 +20,7 @@ POM --- It is a xml file which contains information about project(structure) and
 			 Artifact-id --- name of project
 			 version ------- (Snapshot , Beta , Realeased)
 			 packaging ----- jar - that file run directly
-							 war - need server for run
-							 pom - project object modal
-			 Name ---------- Artifact-id		
-			 Description --- description of project
-	 
+							 
 03(A) - add basic Repository from Mevan Repository		
 			*Untitled - Notepad
 			File Edit Format View Help
