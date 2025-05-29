@@ -78,7 +78,7 @@ public class UserController {
 					throw new Exception(" File Size Can Not Greater Than : " + fileService.getFileMaxSize() + " bytes");
 				}
 				
-				filePath = fileService.saveFile(profilePhoto.getBytes(),"user",FilenameUtils.getExtension(profilePhoto.getOriginalFilename()));
+				filePath = fileService.saveFile(profilePhoto.getBytes(),"users",FilenameUtils.getExtension(profilePhoto.getOriginalFilename()));
 			}
 			
 			userSignUpRequestModel.setProfieImage(filePath);

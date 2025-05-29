@@ -1,5 +1,6 @@
 package com.amstech.tripplanner.booking.converter.entity;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +39,10 @@ public class UserModelToEntityConverter {
 	private UserRoleRepo userRoleRepo;
 	
 	private int customerId = 1;
+	
+	private String extractFileNameOnly(String fullPath) {
+	    return new File(fullPath).getName();
+	}
 
 	public Location signup(UserSignUpRequestModel userSignUpRequestModel) throws Exception {
 		Optional<City> cityOptional = cityRepo.findById(userSignUpRequestModel.getCityId());
@@ -61,7 +66,7 @@ public class UserModelToEntityConverter {
 		user.setGender(userSignUpRequestModel.getGender());
 		user.setPassword(userSignUpRequestModel.getPassword());
 		user.setDob(userSignUpRequestModel.getDob());
-		user.setProfileImage(userSignUpRequestModel.getProfieImage());
+		user.setProfileImage(extractFileNameOnly(userSignUpRequestModel.getProfieImage()));
 		user.setCreatedAt(new Date());
 		user.setUpdatedAt(new Date());
 		

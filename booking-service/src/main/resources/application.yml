@@ -2,3 +2,5 @@ spring:
   name: booking-service 
   profiles:
     active: local
+  resources:
+    static-locations: file:/E:/Projects/Trip-Planner/booking-service/storage/users/

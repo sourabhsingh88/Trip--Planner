@@ -1,5 +1,6 @@
 package com.amstech.tripplanner.booking.converter.modal;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,11 @@ import com.amstech.tripplanner.booking.modal.response.UserResponseModal;
 
 @Component
 public class UserEntityToModalConverter {
+	
+	private String extractFileNameOnly(String fullPath) {
+	    return new File(fullPath).getName();
+	}
+	
 	public UserResponseModal findById(User user) {
 
 		UserResponseModal userResponseModal = new UserResponseModal();
@@ -22,6 +28,7 @@ public class UserEntityToModalConverter {
 		userResponseModal.setGender(user.getGender());
 		userResponseModal.setPhoneNumber(user.getPhoneNumber());
 		userResponseModal.setIsDeleted(user.getIsDeleted());
+		userResponseModal.setProfileImage(extractFileNameOnly(user.getProfileImage()));
 		
 		List<RoleResponseModal> roleResponseModals = new ArrayList<>();
 		for (UserRole userRole : user.getUserRoles()) {
