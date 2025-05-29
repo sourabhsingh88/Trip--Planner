@@ -27,6 +27,9 @@ spring:
           show-sql: false
           format_sql: true
           dialect: org.hibernate.dialect.MySQL8Dialect
+    web:
+      resources:
+        static-locations: file:./storage/users/
 server:
   servlet:
     context-path: /booking-service-api-local
