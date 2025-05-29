@@ -65,7 +65,7 @@ public class TripController {
 				if(image.getSize() > fileService.getFileMaxSize()) {
 					throw new Exception(" File Size Can Not Greater Than : " + fileService.getFileMaxSize() + " bytes");
 				}
-				filePath = fileService.saveFile(image.getBytes(),"trip",FilenameUtils.getExtension(image.getOriginalFilename()));
+				filePath = fileService.saveFile(image.getBytes(),"trips",FilenameUtils.getExtension(image.getOriginalFilename()));
 			}
 			
 			if (tripBanners != null) {

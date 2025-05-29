@@ -1,5 +1,6 @@
 package com.amstech.tripplanner.booking.converter.modal;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,11 @@ import com.amstech.tripplanner.booking.modal.response.TripResponseModal;
 @Component
 public class TripEntityToModalConverter {
 
+	private String extractFileNameOnly(String fullPath) {
+	    return new File(fullPath).getName();
+	}
+
+	
 	public List<TripResponseModal> findAll(List<Trip> trips){
 		List<TripResponseModal> tripResponseModals = new ArrayList<>();
 		for (Trip trip : trips) {
@@ -30,7 +36,7 @@ public class TripEntityToModalConverter {
 			tripResponseModal.setFrom(trip.getFromLocation());
 			tripResponseModal.setTo(trip.getToLocation());
 			tripResponseModal.setPrice(trip.getPrice());
-			tripResponseModal.setImgURL(trip.getImgUrl());
+			tripResponseModal.setImgURL(extractFileNameOnly(trip.getImgUrl()));
 			tripResponseModals.add(tripResponseModal);
 		}
 		return tripResponseModals;
