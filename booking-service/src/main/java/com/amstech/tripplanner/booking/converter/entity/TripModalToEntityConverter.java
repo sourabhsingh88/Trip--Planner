@@ -1,5 +1,6 @@
 package com.amstech.tripplanner.booking.converter.entity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,7 +41,10 @@ public class TripModalToEntityConverter {
 	private final int countinueStatusId  = 9;
 	private final int discontinueStatusId = 10;
 
-	public Location tripCreate(TripCreateRequestModal tripCreateRequestModal) throws Exception {
+	private String extractFileNameOnly(String fullPath) {
+	    return new File(fullPath).getName();
+	}
+	public Location tripCreate (TripCreateRequestModal tripCreateRequestModal) throws Exception {
 		Optional<City> cityOptional = cityRepo.findById(tripCreateRequestModal.getCityId());
 		if(!cityOptional.isPresent()) {
 			throw new Exception("City Is not Available with id : " + tripCreateRequestModal.getCityId());
@@ -73,7 +77,7 @@ public class TripModalToEntityConverter {
 		trip.setFromLocation(tripCreateRequestModal.getFrom());
 		trip.setTourGuideName(tripCreateRequestModal.getTourGuideName());
 		trip.setPrice(tripCreateRequestModal.getPrrice());
-		trip.setImgUrl(tripCreateRequestModal.getUrl());
+		trip.setImgUrl(extractFileNameOnly(tripCreateRequestModal.getUrl()));
 		
 		List<Accommodation> accommodations = new ArrayList<>();
 		for (AccommodationCreateRequestModal accommodationCreateRequestModal : tripCreateRequestModal.getAccommodationCreateRequestModals()) {
@@ -123,7 +127,7 @@ public class TripModalToEntityConverter {
 		List<TripBanner> tripBanners= new ArrayList<>();
 		for (String tripBannerPath : tripCreateRequestModal.getTripBanners()) {
 			TripBanner tripBanner = new TripBanner();
-			tripBanner.setUrl(tripBannerPath);
+			tripBanner.setUrl(extractFileNameOnly(tripBannerPath));
 			tripBanner.setTrip(trip);
 			tripBanners.add(tripBanner);
 		}
