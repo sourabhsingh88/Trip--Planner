@@ -20,10 +20,21 @@ public class AboutUs implements Serializable {
 
 	private String description;
 
+	private String email;
+
 	@Column(name="img_url")
 	private String imgUrl;
 
+	@Lob
+	private String mission;
+
+	@Column(name="phone_number")
+	private String phoneNumber;
+
 	private String title;
+
+	@Lob
+	private String vision;
 
 	public AboutUs() {
 	}
@@ -44,6 +55,14 @@ public class AboutUs implements Serializable {
 		this.description = description;
 	}
 
+	public String getEmail() {
+		return this.email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public String getImgUrl() {
 		return this.imgUrl;
 	}
@@ -52,12 +71,36 @@ public class AboutUs implements Serializable {
 		this.imgUrl = imgUrl;
 	}
 
+	public String getMission() {
+		return this.mission;
+	}
+
+	public void setMission(String mission) {
+		this.mission = mission;
+	}
+
+	public String getPhoneNumber() {
+		return this.phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
 	public String getTitle() {
 		return this.title;
 	}
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public String getVision() {
+		return this.vision;
+	}
+
+	public void setVision(String vision) {
+		this.vision = vision;
 	}
 
 }

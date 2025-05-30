@@ -35,6 +35,7 @@ public class Trip implements Serializable {
 	@Column(name="from_location")
 	private String fromLocation;
 
+	@Lob
 	@Column(name="img_url")
 	private String imgUrl;
 
@@ -53,11 +54,11 @@ public class Trip implements Serializable {
 	private String tourGuideName;
 
 	//bi-directional many-to-one association to Accommodation
-	@OneToMany(mappedBy="trip", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="trip")
 	private List<Accommodation> accommodations;
 
 	//bi-directional many-to-one association to Activity
-	@OneToMany(mappedBy="trip", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="trip")
 	private List<Activity> activities;
 
 	//bi-directional many-to-one association to Booking
@@ -69,7 +70,7 @@ public class Trip implements Serializable {
 	private List<Feedback> feedbacks;
 
 	//bi-directional many-to-one association to Meal
-	@OneToMany(mappedBy="trip", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="trip")
 	private List<Meal> meals;
 
 	//bi-directional many-to-one association to Notification
@@ -77,7 +78,7 @@ public class Trip implements Serializable {
 	private List<Notification> notifications;
 
 	//bi-directional many-to-one association to Transport
-	@OneToMany(mappedBy="trip", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="trip")
 	private List<Transport> transports;
 
 	//bi-directional many-to-one association to Location
@@ -94,7 +95,7 @@ public class Trip implements Serializable {
 	private TripPlanner tripPlanner;
 
 	//bi-directional many-to-one association to TripBanner
-	@OneToMany(mappedBy="trip", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="trip")
 	private List<TripBanner> tripBanners;
 
 	public Trip() {

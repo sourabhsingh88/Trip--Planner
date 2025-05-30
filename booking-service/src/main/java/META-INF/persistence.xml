@@ -9,6 +9,7 @@
 		<class>com.amstech.tripplanner.booking.entity.ContactUs</class>
 		<class>com.amstech.tripplanner.booking.entity.EmailOtp</class>
 		<class>com.amstech.tripplanner.booking.entity.Feedback</class>
+		<class>com.amstech.tripplanner.booking.entity.Gallery</class>
 		<class>com.amstech.tripplanner.booking.entity.Location</class>
 		<class>com.amstech.tripplanner.booking.entity.Meal</class>
 		<class>com.amstech.tripplanner.booking.entity.MobileOtp</class>
