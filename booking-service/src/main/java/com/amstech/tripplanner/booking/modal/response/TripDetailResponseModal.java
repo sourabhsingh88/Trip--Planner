@@ -35,6 +35,6 @@ public class TripDetailResponseModal {
 	private List<ActivityResponseModal> activitiesResponseModals;
 	private List<MealResponseModal> mealsResponseModals;
 	private List<TransportResponseModal> transportsResponseModals;
-//	private List<TripBanner> tripBanners;
+	private List<TripBannerResponseModal> tripBannerResponseModals;
 	
 }

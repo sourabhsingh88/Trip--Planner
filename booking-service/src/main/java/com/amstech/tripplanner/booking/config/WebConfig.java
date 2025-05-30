@@ -17,7 +17,9 @@ public class WebConfig implements WebMvcConfigurer {
         // For user profile images
         registry.addResourceHandler("/users/**")
                 .addResourceLocations("file:storage/users/");
-
+        
+        registry.addResourceHandler("/tripBanners/**")
+        .addResourceLocations("file:storage/tripBanners/");
        
         
     }

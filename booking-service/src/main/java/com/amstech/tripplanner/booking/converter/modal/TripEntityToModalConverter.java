@@ -11,10 +11,12 @@ import com.amstech.tripplanner.booking.entity.Activity;
 import com.amstech.tripplanner.booking.entity.Meal;
 import com.amstech.tripplanner.booking.entity.Transport;
 import com.amstech.tripplanner.booking.entity.Trip;
+import com.amstech.tripplanner.booking.entity.TripBanner;
 import com.amstech.tripplanner.booking.modal.response.AccommodationResponseModal;
 import com.amstech.tripplanner.booking.modal.response.ActivityResponseModal;
 import com.amstech.tripplanner.booking.modal.response.MealResponseModal;
 import com.amstech.tripplanner.booking.modal.response.TransportResponseModal;
+import com.amstech.tripplanner.booking.modal.response.TripBannerResponseModal;
 import com.amstech.tripplanner.booking.modal.response.TripDetailResponseModal;
 import com.amstech.tripplanner.booking.modal.response.TripResponseModal;
 
@@ -24,8 +26,6 @@ public class TripEntityToModalConverter {
 	private String extractFileNameOnly(String fullPath) {
 	    return new File(fullPath).getName();
 	}
-
-	
 	public List<TripResponseModal> findAll(List<Trip> trips){
 		List<TripResponseModal> tripResponseModals = new ArrayList<>();
 		for (Trip trip : trips) {
@@ -110,6 +110,16 @@ public class TripEntityToModalConverter {
 		}
 		
 		tripDetailResponseModal.setTransportsResponseModals(transportResponseModals);
+		
+		List<TripBannerResponseModal> tripBannerResponseModals = new ArrayList<>();
+		for (TripBanner tripBanner : trip.getTripBanners()) {
+			TripBannerResponseModal tripBannerResponseModal = new TripBannerResponseModal();
+			tripBannerResponseModal.setId(tripBanner.getId());
+			tripBannerResponseModal.setUrl(extractFileNameOnly(tripBanner.getUrl()));
+			tripBannerResponseModals.add(tripBannerResponseModal);
+		}
+		
+		tripDetailResponseModal.setTripBannerResponseModals(tripBannerResponseModals);
 		
 		return tripDetailResponseModal;
 	}
