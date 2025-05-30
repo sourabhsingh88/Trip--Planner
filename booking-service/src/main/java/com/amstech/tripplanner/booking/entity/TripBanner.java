@@ -1,9 +1,6 @@
 package com.amstech.tripplanner.booking.entity;
 
 import java.io.Serializable;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.*;
 
 

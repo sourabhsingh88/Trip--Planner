@@ -26,8 +26,8 @@ public class Notification implements Serializable {
 
 	private String title;
 
+	//bi-directional many-to-one association to Status
 	@ManyToOne
-	@JoinColumn(name = "status_id")
 	private Status status;
 
 	//bi-directional many-to-one association to Trip
@@ -37,13 +37,12 @@ public class Notification implements Serializable {
 	//bi-directional many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="sender_id")
-	private User sender;
+	private User user1;
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="receiver_id")
-	private User receiver;
-
+	private User user2;
 
 	public Notification() {
 	}
@@ -80,8 +79,6 @@ public class Notification implements Serializable {
 		this.title = title;
 	}
 
-	
-
 	public Status getStatus() {
 		return this.status;
 	}
@@ -89,7 +86,6 @@ public class Notification implements Serializable {
 	public void setStatus(Status status) {
 		this.status = status;
 	}
-
 
 	public Trip getTrip() {
 		return this.trip;
@@ -99,20 +95,20 @@ public class Notification implements Serializable {
 		this.trip = trip;
 	}
 
-	public User getSender() {
-		return sender;
+	public User getUser1() {
+		return this.user1;
 	}
 
-	public void setSender(User sender) {
-		this.sender = sender;
+	public void setUser1(User user1) {
+		this.user1 = user1;
 	}
 
-	public User getReceiver() {
-		return receiver;
+	public User getUser2() {
+		return this.user2;
 	}
 
-	public void setReceiver(User receiver) {
-		this.receiver = receiver;
+	public void setUser2(User user2) {
+		this.user2 = user2;
 	}
 
 }
