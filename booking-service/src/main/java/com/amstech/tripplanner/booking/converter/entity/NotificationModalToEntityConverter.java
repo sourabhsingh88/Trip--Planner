@@ -1,6 +1,7 @@
 package com.amstech.tripplanner.booking.converter.entity;
 
 import java.sql.Timestamp;
+
 import java.util.Date;
 import java.util.Optional;
 
@@ -16,7 +17,7 @@ public class NotificationModalToEntityConverter {
 
 	public Notification create(NotificationCreateRequestModal notificationCreateRequestModal,Optional<User> senderOptional,Optional<User> receiverOptional,Optional<Trip> tripOptional,Optional<Status> statusOptional) {
 		Notification notification = new Notification();
-		notification.setSender(senderOptional.get()); 
+		notification.setSender(senderOptional.get());;
 		notification.setReceiver(receiverOptional.get());
 		notification.setTrip(tripOptional.get());
 		notification.setTitle(notificationCreateRequestModal.getTitle());
