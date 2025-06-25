@@ -15,7 +15,7 @@ public class Gallery implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private long id;
+	private int id;
 
 	@Lob
 	private String decription;
@@ -26,11 +26,11 @@ public class Gallery implements Serializable {
 	public Gallery() {
 	}
 
-	public long getId() {
+	public int getId() {
 		return this.id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
