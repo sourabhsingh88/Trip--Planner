@@ -100,7 +100,7 @@ public class AboutUsController {
 		}
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/findBy", produces = "application/json")
+	@RequestMapping(method = RequestMethod.GET, value = "/findBy", produces = "application/json")
 	public RestResponse findById(@RequestParam("id") Integer id) throws IOException {
 		LOGGER.info("Start Finding  About Us Detail with Id : {} ", id);
 		

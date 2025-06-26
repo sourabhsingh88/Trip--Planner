@@ -1,5 +1,6 @@
 package com.amstech.tripplanner.booking.converter.entity;
 
+import java.io.File;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,12 @@ public class GalleryModalToEntityConverter {
 	@Autowired
 	private GalleryRepo galleryRepo;
 	
+	private String extractFileNameOnly(String fullPath) {
+	    return new File(fullPath).getName();
+	}
 	public Gallery save(GallerySaveReqestModal gallerySaveReqestModal) {
 		Gallery gallery = new Gallery();
-		gallery.setImageUrl(gallerySaveReqestModal.getImage());
+		gallery.setImageUrl(extractFileNameOnly(gallerySaveReqestModal.getImage()));
 		gallery.setDecription(gallerySaveReqestModal.getDescription());
 		return gallery;
 	}
@@ -29,7 +33,7 @@ public class GalleryModalToEntityConverter {
 			throw new Exception("gallery is not Present");
 		}
 		Gallery gallery = galleryOptional.get();
-		gallery.setImageUrl(galleryUpdateReqestModal.getImage());
+		gallery.setImageUrl(extractFileNameOnly(galleryUpdateReqestModal.getImage()));
 		gallery.setDecription(galleryUpdateReqestModal.getDescription());
 		return gallery;
 	}
