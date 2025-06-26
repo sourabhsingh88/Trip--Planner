@@ -1,5 +1,6 @@
 package com.amstech.tripplanner.booking.converter.modal;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,11 +11,13 @@ import com.amstech.tripplanner.booking.modal.response.GalleryResponseModal;
 
 @Component
 public class GalleryEntityToModalConverter {
-	
+	private String extractFileNameOnly(String fullPath) {
+	    return new File(fullPath).getName();
+	}
 	public GalleryResponseModal findBy(Gallery gallery) {
 		GalleryResponseModal galleryResponseModal =  new GalleryResponseModal();
 		galleryResponseModal.setId(gallery.getId());
-		galleryResponseModal.setImage(gallery.getImageUrl());
+		galleryResponseModal.setImage(extractFileNameOnly(gallery.getImageUrl()));
 		galleryResponseModal.setDescription(gallery.getDecription());
 		return galleryResponseModal;
 	}
@@ -23,7 +26,7 @@ public class GalleryEntityToModalConverter {
 		for (Gallery gallery : galleries) {
 			GalleryResponseModal galleryResponseModal =  new GalleryResponseModal();
 			galleryResponseModal.setId(gallery.getId());
-			galleryResponseModal.setImage(gallery.getImageUrl());
+			galleryResponseModal.setImage(extractFileNameOnly(gallery.getImageUrl()));
 			galleryResponseModal.setDescription(gallery.getDecription());
 			galleryResponseModals.add(galleryResponseModal);
 		}
