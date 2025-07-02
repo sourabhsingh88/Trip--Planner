@@ -87,6 +87,20 @@ public class BookingController {
 			return RestResponse.build().withError("Failed to Booking Found due to : " + e.getMessage());
 		}
 	}
+	@RequestMapping(method = RequestMethod.GET, value ="/byTripPlannerId",produces = "application/json")
+	public RestResponse findByTripPlannerId(@RequestParam("tripplannerId") Integer tripplannerId,@RequestParam("page") Integer page, @RequestParam("size") Integer size){
+		
+		LOGGER.info("Fetching Details of Bookings for TripplannerId : {} " ,tripplannerId);
+		try {
+			List<BookingReaponseModal> bookingReaponseModals = bookingService.findByTripplannerId(tripplannerId, page, size);
+			long totalRecords = bookingService.countByTripplanner(tripplannerId);
+			return RestResponse.build().withSuccess("Booking Founds").withTotalRecords(totalRecords)
+					.withPageNumber(page).withPageSize(size).withData(bookingReaponseModals);
+		} catch (Exception e) {
+			LOGGER.error("Failed to Fetching Details of Booking for tripplanner due to : {}", e.getMessage(), e);
+			return RestResponse.build().withError("Failed to Booking Found due to : " + e.getMessage());
+		}
+	}
 	
 	@RequestMapping(method = RequestMethod.GET, value ="/all",produces = "application/json")
 	public RestResponse findAll(@RequestParam("page") Integer page, @RequestParam("size") Integer size){

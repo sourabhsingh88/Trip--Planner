@@ -1,5 +1,6 @@
 package com.amstech.tripplanner.booking.converter.modal;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,13 +12,18 @@ import com.amstech.tripplanner.booking.modal.response.BookingReaponseModal;
 @Component
 public class BookingEntityToModalConverter {
 
+	private String extractFileNameOnly(String fullPath) {
+	    return new File(fullPath).getName();
+	}
 	public BookingReaponseModal findById(Booking booking) {
 		BookingReaponseModal bookingReaponseModal = new BookingReaponseModal();
 		bookingReaponseModal.setId(booking.getId());
+		bookingReaponseModal.setTripId(booking.getTrip().getId());
 		bookingReaponseModal.setTripName(booking.getTrip().getName());
 		bookingReaponseModal.setTripPlannerName(booking.getTrip().getTripPlanner().getUser().getName());
 		bookingReaponseModal.setTripPrice(booking.getTrip().getPrice());
 		bookingReaponseModal.setTripDescription(booking.getTrip().getDescription());
+		bookingReaponseModal.setImgUrl(extractFileNameOnly(booking.getTrip().getImgUrl()));
 		bookingReaponseModal.setStatusName(booking.getStatus().getName());
 		return bookingReaponseModal;
 	}
@@ -28,10 +34,12 @@ public class BookingEntityToModalConverter {
 		for (Booking booking : bookings) {
 			BookingReaponseModal bookingReaponseModal = new BookingReaponseModal();
 			bookingReaponseModal.setId(booking.getId());
+			bookingReaponseModal.setTripId(booking.getTrip().getId());
 			bookingReaponseModal.setTripName(booking.getTrip().getName());
 			bookingReaponseModal.setTripPlannerName(booking.getTrip().getTripPlanner().getUser().getName());
 			bookingReaponseModal.setTripPrice(booking.getTrip().getPrice());
 			bookingReaponseModal.setTripDescription(booking.getTrip().getDescription());
+			bookingReaponseModal.setImgUrl(extractFileNameOnly(booking.getTrip().getImgUrl()));
 			bookingReaponseModal.setStatusName(booking.getStatus().getName());
 
 			bookingReaponseModals.add(bookingReaponseModal);

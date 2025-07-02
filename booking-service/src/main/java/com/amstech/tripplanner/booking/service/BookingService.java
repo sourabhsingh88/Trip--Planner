@@ -18,12 +18,14 @@ import com.amstech.tripplanner.booking.entity.Booking;
 import com.amstech.tripplanner.booking.entity.Notification;
 import com.amstech.tripplanner.booking.entity.Status;
 import com.amstech.tripplanner.booking.entity.Trip;
+import com.amstech.tripplanner.booking.entity.TripPlanner;
 import com.amstech.tripplanner.booking.entity.User;
 import com.amstech.tripplanner.booking.modal.request.BookingCreateRequestModal;
 import com.amstech.tripplanner.booking.modal.request.BookingUpdateRequestModal;
 import com.amstech.tripplanner.booking.modal.response.BookingReaponseModal;
 import com.amstech.tripplanner.booking.repo.BookingRepo;
 import com.amstech.tripplanner.booking.repo.StatusRepo;
+import com.amstech.tripplanner.booking.repo.TripPlannerRepo;
 import com.amstech.tripplanner.booking.repo.TripRepo;
 import com.amstech.tripplanner.booking.repo.UserRepo;
 
@@ -34,6 +36,8 @@ public class BookingService {
 
 	@Autowired
 	private UserRepo userRepo;
+	@Autowired
+	private TripPlannerRepo tripPlannerRepo;
 	@Autowired
 	private TripRepo tripRepo;
 	@Autowired
@@ -107,10 +111,30 @@ public class BookingService {
 		List<BookingReaponseModal> bookingReaponseModals = bookingEntityToModalConverter.findByUserId(bookings);
 		return bookingReaponseModals;
 	}
+	
+	
 	public long countByUserId(Integer userId) {
 		return bookingRepo.countByUserId(userId);
 	}
 	
+	public List<BookingReaponseModal> findByTripplannerId(Integer tripplannerId,Integer page,Integer size) throws Exception {
+		Optional<TripPlanner> tripplannerOptional = tripPlannerRepo.findById(tripplannerId);
+		if (!tripplannerOptional.isPresent()) {
+			throw new Exception("TripPlanner Is no Available with id  : " + tripplannerId);
+		}
+		List<Booking> bookings = bookingRepo.findByTripplannerId(tripplannerId,PageRequest.of(page, size));
+		if (bookings.isEmpty()) {
+			throw new Exception("No bookings Available with tripplannerId : " + tripplannerId);
+		}
+		List<BookingReaponseModal> bookingReaponseModals = bookingEntityToModalConverter.findByUserId(bookings);
+		return bookingReaponseModals;
+	}
+	
+	public long countByTripplanner(Integer tripplannerId) {
+		return bookingRepo.countByTripplannerId(tripplannerId);
+	}
+	
+	 
 	public List<BookingReaponseModal> findAll(Integer page,Integer size) throws Exception {
 		List<Booking> bookings = bookingRepo.findAllBooking(PageRequest.of(page, size));
 		if (bookings.isEmpty()) {

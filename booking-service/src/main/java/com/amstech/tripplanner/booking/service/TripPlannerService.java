@@ -75,5 +75,13 @@ public class TripPlannerService {
 		return tripPlannerRepo.countAllByUserId(userId);
 	}
 	
+	public TripPlannerResponseModal findApprovedByUserId(Integer userId) throws Exception {
+		TripPlanner tripPlanner = tripPlannerRepo.findApprovedByUserId(userId);
+		if(tripPlanner == null) {
+			throw new Exception("No Application tripplanner exist");
+		}
+		return tripPlannerEntityToModalConverter.findById(tripPlanner);
+	}
+	
 	
 }

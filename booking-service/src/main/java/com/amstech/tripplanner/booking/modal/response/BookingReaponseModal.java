@@ -6,6 +6,8 @@ import lombok.Data;
 public class BookingReaponseModal {
 
 	private int id;
+	private int tripId;
+	private String imgUrl;
 	private String tripName;
 	private String tripPlannerName;
 	private String tripDescription;
