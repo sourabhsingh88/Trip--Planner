@@ -22,6 +22,7 @@ public class TripDetailResponseModal {
 	private String countryName;
 	private String statusName;
 	private String tripPlannerName;
+	private int tripPlannerId;
 	private String name;
 	private String to;
 	private String from;

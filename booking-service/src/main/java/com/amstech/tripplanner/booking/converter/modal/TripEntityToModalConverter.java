@@ -36,6 +36,7 @@ public class TripEntityToModalConverter {
 			tripResponseModal.setFrom(trip.getFromLocation());
 			tripResponseModal.setTo(trip.getToLocation());
 			tripResponseModal.setPrice(trip.getPrice());
+			tripResponseModal.setTripPlannerId(trip.getTripPlanner().getId());
 			tripResponseModal.setImgURL(extractFileNameOnly(trip.getImgUrl()));
 			tripResponseModals.add(tripResponseModal);
 		}
@@ -52,6 +53,7 @@ public class TripEntityToModalConverter {
 		tripDetailResponseModal.setTo(trip.getToLocation());
 		tripDetailResponseModal.setPrice(trip.getPrice());
 		tripDetailResponseModal.setImgURL(trip.getImgUrl());
+		tripDetailResponseModal.setTripPlannerId(trip.getTripPlanner().getId());
 		tripDetailResponseModal.setTripPlannerName(trip.getTripPlanner().getUser().getName());
 		tripDetailResponseModal.setCountryName(trip.getLocation().getCity().getState().getCountry());
 		tripDetailResponseModal.setStateName(trip.getLocation().getCity().getState().getName());

@@ -102,5 +102,17 @@ public class TripPlannerController {
 		}
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "/ApprovedByUserId", produces = "application/json")
+	public RestResponse findApprovedByUserId(@RequestParam("userId") Integer userId) {
+		LOGGER.info("Fetching Approved Trip Planner");
+		try {
+			TripPlannerResponseModal tripPlannerResponseModal = tripPlannerService.findApprovedByUserId(userId);
+			return RestResponse.build().withSuccess("SuccessFully TripPlanner Found", tripPlannerResponseModal);
+		} catch (Exception e) {
+			LOGGER.error("Failed To Find Tripplanner Application due to  : {} ", e.getMessage(), e);
+			return RestResponse.build().withError("Failed To Tripplanner Application due to" + e.getMessage());
+		}
+	}
+	
 
 }

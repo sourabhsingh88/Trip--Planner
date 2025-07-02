@@ -9,6 +9,7 @@ public class TripResponseModal {
 	private String to;
 	private String from;
 	private double price;
+	private int tripPlannerId;
 	private String imgURL;
 	private String description;
 	

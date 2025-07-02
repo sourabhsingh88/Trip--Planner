@@ -21,6 +21,12 @@ public interface BookingRepo extends JpaRepository<Booking, Integer> {
 	@Query("select count(b) from Booking b where b.user.id =:userId")
 	long countByUserId(@Param("userId") int userId);
 	
+	@Query("select b from Booking b where b.trip.tripPlanner.id =:tripplannerId")
+	List<Booking> findByTripplannerId(@Param("tripplannerId") int tripplannerId,Pageable pageable);
+	
+	@Query("select count(b) from Booking b where b.trip.tripPlanner.id =:tripplannerId")
+	long countByTripplannerId(@Param("tripplannerId") int tripplannerId);
+	
 	@Query("select b from Booking b")
 	List<Booking> findAllBooking(Pageable pageable);
 	

@@ -22,4 +22,8 @@ public interface TripPlannerRepo extends JpaRepository<TripPlanner, Integer>{
 	
 	@Query("select count(tp) from TripPlanner tp where tp.user.id=:userId")
 	long countAllByUserId(@RequestParam("userId") Integer userId);
+	
+	
+	@Query("select tp from TripPlanner tp where tp.user.id=:userId and tp.status.id = 7")
+	TripPlanner findApprovedByUserId(@RequestParam("userId") Integer userId);
 }
