@@ -1,5 +1,6 @@
 package com.amstech.tripplanner.booking.converter.modal;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,9 @@ import com.amstech.tripplanner.booking.modal.response.TripPlannerResponseModal;
 @Component
 public class TripPlannerEntityToModalConverter {
 
+	private String extractFileNameOnly(String fullPath) {
+	    return new File(fullPath).getName();
+	}
 	
 	public TripPlannerResponseModal findById(TripPlanner tripPlanner) {
 		TripPlannerResponseModal tripPlannerResponseModal = new TripPlannerResponseModal();
@@ -21,7 +25,7 @@ public class TripPlannerEntityToModalConverter {
 		tripPlannerResponseModal.setCompanyName(tripPlanner.getCompanyName());
 		tripPlannerResponseModal.setExperience(tripPlanner.getExperience());
 		tripPlannerResponseModal.setStatusName(tripPlanner.getStatus().getName());
-		tripPlannerResponseModal.setProfilePhoto(tripPlanner.getUser().getProfileImage());
+		tripPlannerResponseModal.setProfilePhoto(extractFileNameOnly(tripPlanner.getUser().getProfileImage()));
 		return tripPlannerResponseModal;
 	}
 	public List<TripPlannerResponseModal> findAll(List<TripPlanner> tripPlanners){
@@ -36,7 +40,7 @@ public class TripPlannerEntityToModalConverter {
 			tripPlannerResponseModal.setCompanyName(tripPlanner.getCompanyName());
 			tripPlannerResponseModal.setExperience(tripPlanner.getExperience());
 			tripPlannerResponseModal.setStatusName(tripPlanner.getStatus().getName());
-			tripPlannerResponseModal.setProfilePhoto(tripPlanner.getUser().getProfileImage());
+			tripPlannerResponseModal.setProfilePhoto(extractFileNameOnly(tripPlanner.getUser().getProfileImage()));
 			tripPlannerResponseModals.add(tripPlannerResponseModal);
 		}
 		return tripPlannerResponseModals;

@@ -1,4 +1,4 @@
-package com.amstech.tripplanner.booking.service;
+ package com.amstech.tripplanner.booking.service;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -74,16 +74,25 @@ public class NotificationService {
 			throw new Exception("Status Is no Available with id  : " + unReadId);
 		}
 
-		List<Notification> notificationExists = notificationRepo.findBySenderIdReciver(senderOptional.get().getId(),
-				receiverOptional.get().getId());
-		if (notificationExists != null) {
-			for (Notification notificationExist : notificationExists) {
-				if (notificationExist.getStatus().getId() == unReadId)
-					throw new Exception(
-							"Notifcation Is Already Send and which is unreaded with id : " + notificationExist.getId());
-			}
+		List<Notification> notificationExists = notificationRepo.findUnreadNotification(
+				senderOptional.get().getId(),
+				receiverOptional.get().getId(),
+				tripOptional.get().getId(),
+				unReadId);
+		if (notificationExists != null && !notificationExists.isEmpty()) {
+		    Optional<Status> readStatusOptional = statusRepo.findById(readId);
+		    if (!readStatusOptional.isPresent()) {
+		        throw new Exception("Status READ not available with id: " + readId);
+		    }
 
+		    Status readStatus = readStatusOptional.get();
+
+		    for (Notification n : notificationExists) {
+		        n.setStatus(readStatus);
+		    }
+		    notificationRepo.saveAll(notificationExists); 
 		}
+
 		Notification notification = notificationModalToEntityConverter.create(notificationCreateRequestModal,
 				senderOptional, receiverOptional, tripOptional, statusOptional);
 		Notification savedNotification = notificationRepo.save(notification);

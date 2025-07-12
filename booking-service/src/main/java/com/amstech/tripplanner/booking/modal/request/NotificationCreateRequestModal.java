@@ -9,5 +9,6 @@ public class NotificationCreateRequestModal {
 	private int tripId;
 	private String title;
 	private String message;
+	private int receiverRoleId;
 	
 }
