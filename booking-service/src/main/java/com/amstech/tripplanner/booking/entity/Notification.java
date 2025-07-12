@@ -10,109 +10,114 @@ import java.sql.Timestamp;
  * 
  */
 @Entity
-@NamedQuery(name="Notification.findAll", query="SELECT n FROM Notification n")
+@NamedQuery(name = "Notification.findAll", query = "SELECT n FROM Notification n")
 public class Notification implements Serializable {
-	private static final long serialVersionUID = 1L;
+ 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
+ 	@Id
+ 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+ 	private int id;
 
-	@Column(name="created_at")
-	private Timestamp createdAt;
+ 	@Column(name = "created_at")
+ 	private Timestamp createdAt;
 
-	@Lob
-	private String message;
+ 	@Lob
+ 	private String message;
 
-	private String title;
+ 	private String title;
 
-	@ManyToOne
-	@JoinColumn(name = "status_id")
-	private Status status;
+ 	@ManyToOne
+ 	@JoinColumn(name = "status_id")
+ 	private Status status;
 
-	//bi-directional many-to-one association to Trip
-	@ManyToOne
-	private Trip trip;
+ 	@ManyToOne
+ 	private Trip trip;
 
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	@JoinColumn(name="sender_id")
-	private User sender;
+ 	@ManyToOne
+ 	@JoinColumn(name = "sender_id")
+ 	private User sender;
 
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	@JoinColumn(name="receiver_id")
-	private User receiver;
+ 	@ManyToOne
+ 	@JoinColumn(name = "receiver_id")
+ 	private User receiver;
 
+ 	@ManyToOne
+ 	@JoinColumn(name = "receiver_role_id")
+ 	private Role receiverRole;
 
-	public Notification() {
-	}
+ 	public Notification() {}
 
-	public int getId() {
-		return this.id;
-	}
+ 	// Getters & Setters
 
-	public void setId(int id) {
-		this.id = id;
-	}
+ 	public int getId() {
+ 		return this.id;
+ 	}
 
-	public Timestamp getCreatedAt() {
-		return this.createdAt;
-	}
+ 	public void setId(int id) {
+ 		this.id = id;
+ 	}
 
-	public void setCreatedAt(Timestamp createdAt) {
-		this.createdAt = createdAt;
-	}
+ 	public Timestamp getCreatedAt() {
+ 		return this.createdAt;
+ 	}
 
-	public String getMessage() {
-		return this.message;
-	}
+ 	public void setCreatedAt(Timestamp createdAt) {
+ 		this.createdAt = createdAt;
+ 	}
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+ 	public String getMessage() {
+ 		return this.message;
+ 	}
 
-	public String getTitle() {
-		return this.title;
-	}
+ 	public void setMessage(String message) {
+ 		this.message = message;
+ 	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+ 	public String getTitle() {
+ 		return this.title;
+ 	}
 
-	
+ 	public void setTitle(String title) {
+ 		this.title = title;
+ 	}
 
-	public Status getStatus() {
-		return this.status;
-	}
+ 	public Status getStatus() {
+ 		return this.status;
+ 	}
 
-	public void setStatus(Status status) {
-		this.status = status;
-	}
+ 	public void setStatus(Status status) {
+ 		this.status = status;
+ 	}
 
+ 	public Trip getTrip() {
+ 		return this.trip;
+ 	}
 
-	public Trip getTrip() {
-		return this.trip;
-	}
+ 	public void setTrip(Trip trip) {
+ 		this.trip = trip;
+ 	}
 
-	public void setTrip(Trip trip) {
-		this.trip = trip;
-	}
+ 	public User getSender() {
+ 		return sender;
+ 	}
 
-	public User getSender() {
-		return sender;
-	}
+ 	public void setSender(User sender) {
+ 		this.sender = sender;
+ 	}
 
-	public void setSender(User sender) {
-		this.sender = sender;
-	}
+ 	public User getReceiver() {
+ 		return receiver;
+ 	}
 
-	public User getReceiver() {
-		return receiver;
-	}
+ 	public void setReceiver(User receiver) {
+ 		this.receiver = receiver;
+ 	}
 
-	public void setReceiver(User receiver) {
-		this.receiver = receiver;
-	}
+ 	public Role getReceiverRole() {
+ 		return receiverRole;
+ 	}
 
-}
+ 	public void setReceiverRole(Role receiverRole) {
+ 		this.receiverRole = receiverRole;
+ 	}
+ }

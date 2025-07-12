@@ -10,9 +10,15 @@ import org.springframework.data.repository.query.Param;
 import com.amstech.tripplanner.booking.entity.Notification;
 
 public interface NotificationRepo extends JpaRepository<Notification, Integer> {
+	
+	@Query("SELECT n FROM Notification n WHERE n.sender.id = :senderId AND n.receiver.id = :receiverId AND n.trip.id = :tripId AND n.status.id = :statusId")
+	List<Notification> findUnreadNotification(
+	    @Param("senderId") int senderId,
+	    @Param("receiverId") int receiverId,
+	    @Param("tripId") int tripId,
+	    @Param("statusId") int statusId  
+	);
 
-	@Query("select n from Notification n where n.sender.id =:senderId and n.receiver.id =:receiverId")
-	List<Notification> findBySenderIdReciver(@Param("senderId") int senderId, @Param("receiverId") int receiverId);
 	
 	@Query("select n from Notification n where n.receiver.id =:receiverId and n.status.id =:unRead")
 	List<Notification> findAllByReceiverId( @Param("receiverId") int receiverId,@Param("unRead") int unRead,Pageable pageable);
