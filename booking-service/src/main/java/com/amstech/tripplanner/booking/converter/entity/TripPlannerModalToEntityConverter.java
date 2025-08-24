@@ -26,6 +26,8 @@ public class TripPlannerModalToEntityConverter {
 	private TripPlannerRepo tripPlannerRepo;
 	
 	private int pendingId = 6;
+	
+	
 	public TripPlanner apply(TripPlannerApplyRequestModal tripPlannerApplyRequestModal) throws Exception {
 		Optional<User> userOptional = userRepo.findById(tripPlannerApplyRequestModal.getUserId());
 		if (!userOptional.isPresent()) {

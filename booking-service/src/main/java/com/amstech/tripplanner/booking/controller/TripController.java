@@ -29,7 +29,6 @@ import com.amstech.tripplanner.booking.service.FileService;
 import com.amstech.tripplanner.booking.service.TripService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
 @RestController
 @RequestMapping("trip")
 public class TripController {
@@ -47,45 +46,47 @@ public class TripController {
 
 		LOGGER.info("TripController : Object Created");
 	}
-	
-	@RequestMapping(method = RequestMethod.POST, value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,produces = "application/json")
-	public RestResponse create(
-			@RequestParam("tripCreateJson") String tripCreateJson,
-			@RequestParam("image") MultipartFile image,
-			@RequestParam("tripBanner") List<MultipartFile> tripBanners) throws IOException {
+
+	@RequestMapping(method = RequestMethod.POST, value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json")
+	public RestResponse create(@RequestParam("tripCreateJson") String tripCreateJson,
+			@RequestParam("image") MultipartFile image, @RequestParam("tripBanner") List<MultipartFile> tripBanners)
+			throws IOException {
 		String filePath = null;
 		List<String> tripBannerPath = new ArrayList<>();
-		
+
 		try {
-			TripCreateRequestModal tripCreateRequestModal = objectMapper.readValue(tripCreateJson,TripCreateRequestModal.class);
+			TripCreateRequestModal tripCreateRequestModal = objectMapper.readValue(tripCreateJson,
+					TripCreateRequestModal.class);
 			LOGGER.info("Creating Trip with name : " + tripCreateRequestModal.getName());
-			
-			if(image != null) {
-				LOGGER.info("File Name : "+ image.getOriginalFilename() + " and Size : " + image.getSize() );
-				if(image.getSize() > fileService.getFileMaxSize()) {
+
+			if (image != null) {
+				LOGGER.info("File Name : " + image.getOriginalFilename() + " and Size : " + image.getSize());
+				if (image.getSize() > fileService.getFileMaxSize()) {
 					throw new Exception(" File Size Can Not Greater Than : " + fileService.getFileMaxSize() + " bytes");
 				}
-				filePath = fileService.saveFile(image.getBytes(),"trips",FilenameUtils.getExtension(image.getOriginalFilename()));
+				filePath = fileService.saveFile(image.getBytes(), "trips",
+						FilenameUtils.getExtension(image.getOriginalFilename()));
 			}
-			
+
 			if (tripBanners != null) {
 
 				for (MultipartFile tripBanner : tripBanners) {
-					LOGGER.info("File name: {} with file size: {} byts", tripBanner.getOriginalFilename(),tripBanner.getSize());
+					LOGGER.info("File name: {} with file size: {} byts", tripBanner.getOriginalFilename(),
+							tripBanner.getSize());
 					if (tripBanner.getSize() > fileService.getFileMaxSize())
 						throw new Exception(
 								"File size can not be gretter then: " + fileService.getFileMaxSize() + "byts");
 
-					tripBannerPath.add(fileService.saveFile(tripBanner.getBytes(), "tripBanners",FilenameUtils.getExtension(tripBanner.getOriginalFilename())));
+					tripBannerPath.add(fileService.saveFile(tripBanner.getBytes(), "tripBanners",
+							FilenameUtils.getExtension(tripBanner.getOriginalFilename())));
 
 				}
-				
 
 			}
 			tripCreateRequestModal.setTripBanners(tripBannerPath);
 			tripCreateRequestModal.setUrl(filePath);
 			LocationWithTripResponseModal locationWithTripResponseModal = tripService.create(tripCreateRequestModal);
-			return RestResponse.build().withSuccess("SuccessFully Create trip",locationWithTripResponseModal);
+			return RestResponse.build().withSuccess("SuccessFully Create trip", locationWithTripResponseModal);
 		} catch (Exception e) {
 			FileUtils.delete(new File(filePath));
 			LOGGER.error("Failed to Fetching All Trips Availables due to : {}", e.getMessage(), e);
@@ -100,8 +101,44 @@ public class TripController {
 		try {
 			List<TripResponseModal> tripResponseModals = tripService.findAllContinue(page, size);
 			long totalRecords = tripService.countAllContinue();
-			return RestResponse.build().withSuccess("Trip Founds").withTotalRecords(totalRecords)
-					.withPageNumber(page).withPageSize(size).withData(tripResponseModals);
+			return RestResponse.build().withSuccess("Trip Founds").withTotalRecords(totalRecords).withPageNumber(page)
+					.withPageSize(size).withData(tripResponseModals);
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.error("Failed to Fetching All Trips Availables due to : {}", e.getMessage(), e);
+			return RestResponse.build().withError("Failed to Fetching All Trips Availables due to : " + e.getMessage());
+		}
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/allContinousByTripPlanner", produces = "application/json")
+	public RestResponse findAllContinousByTripPlanner(@RequestParam("tripPlannerId") Integer tripPlannerId,
+			@RequestParam("page") Integer page, @RequestParam("size") Integer size) {
+
+		LOGGER.info("Fetching All Trips Available");
+		try {
+			List<TripResponseModal> tripResponseModals = tripService.findAllContinueByTripplanner(tripPlannerId, page,
+					size);
+			long totalRecords = tripService.countAllContinueByTripplanner(tripPlannerId);
+			return RestResponse.build().withSuccess("Trip Founds").withTotalRecords(totalRecords).withPageNumber(page)
+					.withPageSize(size).withData(tripResponseModals);
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.error("Failed to Fetching All Trips Availables due to : {}", e.getMessage(), e);
+			return RestResponse.build().withError("Failed to Fetching All Trips Availables due to : " + e.getMessage());
+		}
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/allDiscontinousByTripPlanner", produces = "application/json")
+	public RestResponse findAllDiscontinousByTripPlanner(@RequestParam("tripPlannerId") Integer tripPlannerId,
+			@RequestParam("page") Integer page, @RequestParam("size") Integer size) {
+
+		LOGGER.info("Fetching All Trips Available");
+		try {
+			List<TripResponseModal> tripResponseModals = tripService.findAllDiscontinueByTripplanner(tripPlannerId,
+					page, size);
+			long totalRecords = tripService.countAllDiscontinueByTripplanner(tripPlannerId);
+			return RestResponse.build().withSuccess("Trip Founds").withTotalRecords(totalRecords).withPageNumber(page)
+					.withPageSize(size).withData(tripResponseModals);
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.error("Failed to Fetching All Trips Availables due to : {}", e.getMessage(), e);
@@ -115,58 +152,63 @@ public class TripController {
 		LOGGER.info("Fetching Details of Trip with id : {}", id);
 		try {
 			TripDetailResponseModal tripResponseModal = tripService.findById(id);
-			return RestResponse.build().withSuccess("Trip founds",tripResponseModal);
+			return RestResponse.build().withSuccess("Trip founds", tripResponseModal);
 		} catch (Exception e) {
 			LOGGER.error("Failed to Fetching Details of Trip with id due to : {}", e.getMessage(), e);
-			return RestResponse.build().withError("Failed to Fetching Details of Trip with id due to : " + e.getMessage());
+			return RestResponse.build()
+					.withError("Failed to Fetching Details of Trip with id due to : " + e.getMessage());
 		}
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/search", produces = "application/json")
-	public RestResponse SearchByName(@RequestParam("name") String name,@RequestParam("page") Integer page, @RequestParam("size") Integer size) {
-		LOGGER.info("fetching trip data by name : {}" , name);
+	public RestResponse SearchByName(@RequestParam("name") String name, @RequestParam("page") Integer page,
+			@RequestParam("size") Integer size) {
+		LOGGER.info("fetching trip data by name : {}", name);
 		try {
 			List<TripResponseModal> tripResponseModals = tripService.findByName(name, page, size);
 			long totalRecords = tripService.countByName(name);
-			return RestResponse.build().withSuccess("Trip Founds").withTotalRecords(totalRecords)
-					.withPageNumber(page).withPageSize(size).withData(tripResponseModals);
+			return RestResponse.build().withSuccess("Trip Founds").withTotalRecords(totalRecords).withPageNumber(page)
+					.withPageSize(size).withData(tripResponseModals);
 		} catch (Exception e) {
 			LOGGER.error("Failed to Fetching Details of Trip with id due to : {}", e.getMessage(), e);
-			return RestResponse.build().withError("Failed to Fetching Details of Trip with id due to : " + e.getMessage());
+			return RestResponse.build()
+					.withError("Failed to Fetching Details of Trip with id due to : " + e.getMessage());
 		}
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/updateStatus", produces = "application/json")
 	public RestResponse toggleTripStatus(@RequestParam("id") Integer id) {
-		LOGGER.info("Updateing trip Status by statusId : {}" , id);
+		LOGGER.info("Updateing trip Status by statusId : {}", id);
 		try {
 			TripDetailResponseModal tripreDetailResponseModal = tripService.toggleTripStatus(id);
 			return RestResponse.build().withSuccess("Successufully Update status of trip", tripreDetailResponseModal);
 		} catch (Exception e) {
 			LOGGER.error("Failed to update status due to : {}", e.getMessage(), e);
-			return RestResponse.build().withError("Failed to update status due to : " +  e.getMessage());
+			return RestResponse.build().withError("Failed to update status due to : " + e.getMessage());
 		}
-		
+
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/filterBy", produces = "application/json")
-	public RestResponse filterBy(
-			@RequestParam(value = "page", required = true) Integer page,
+	public RestResponse filterBy(@RequestParam(value = "page", required = true) Integer page,
 			@RequestParam(value = "size", required = true) Integer size,
 			@RequestParam(value = "to", required = false) String to,
 			@RequestParam(value = "from", required = false) String from,
-			@RequestParam(value = "duration", required = false) Integer duration,
-			@RequestParam(value = "price", required = false) Integer price,
+			@RequestParam(value = "startDuration", required = false) Integer startDuration,
+			@RequestParam(value = "endDuration", required = false) Integer endDuration,
+			@RequestParam(value = "startPrice", required = false) Integer startPrice,
+			@RequestParam(value = "endPrice", required = false) Integer endPrice,
 			@RequestParam(value = "keyword", required = false) String keyword) {
 		LOGGER.info(
-				"Fetching user by fillter page: {}, size: {}, to: {}, from: {}, gender: {}, duration: {}, price: {}, keyword: {}",
-				page, size, to, from, duration, price, keyword);
+				"Fetching user by fillter page: {}, size: {}, to: {}, from: {}, gender: {}, duration: {}, startPrice: {}, endPrice: {}, keyword: {}",
+				page, size, to, from, startDuration, endDuration, startPrice, endPrice, keyword);
 		try {
-			List<TripResponseModal> tripResponseModals = tripService.filterBy(page, size, to, from, duration, price, keyword);
-			long totalRecord = tripService.countBy(to, from, duration, price, keyword);
+			List<TripResponseModal> tripResponseModals = tripService.filterBy(page, size, to, from, startDuration,
+					endDuration, startPrice, endPrice, keyword);
+			long totalRecord = tripService.countBy(to, from, startDuration, endDuration, startPrice, endPrice, keyword);
 			return RestResponse.build().withSuccess("Trip list found successfully").withTotalRecords(totalRecord)
 					.withPageNumber(page).withPageSize(size).withData(tripResponseModals);
-		} catch ( Exception e) {
+		} catch (Exception e) {
 			LOGGER.error("Failed to find Trip list due to: {}", e.getMessage(), e);
 			return RestResponse.build().withError(e.getMessage());
 		}

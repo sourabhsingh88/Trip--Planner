@@ -147,6 +147,12 @@ public class Userservice {
 		User updatedUser = userRepo.save(user);
 		return userEntityToModalConverter.findById(updatedUser);
 	}
+	
+	public UserResponseModal fullUpdate(UserFullUpdateRequestModal userFullUpdateRequestModal) throws Exception {
+		User user = userModelToEntityConverter.fullUpdate(userFullUpdateRequestModal);
+		User updatedUser = userRepo.save(user);
+		return userEntityToModalConverter.findById(updatedUser);
+	}
 
 	public List<UserResponseModal> findAllActive(Integer page, Integer size) throws Exception {
 		List<User> allActiveUser = userRepo.findAllActiveUser(PageRequest.of(page, size));

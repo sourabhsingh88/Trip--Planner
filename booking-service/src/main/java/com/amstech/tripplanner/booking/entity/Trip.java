@@ -54,31 +54,31 @@ public class Trip implements Serializable {
 	private String tourGuideName;
 
 	//bi-directional many-to-one association to Accommodation
-	@OneToMany(mappedBy="trip")
+	@OneToMany(mappedBy="trip",cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Accommodation> accommodations;
 
 	//bi-directional many-to-one association to Activity
-	@OneToMany(mappedBy="trip")
+	@OneToMany(mappedBy="trip",cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Activity> activities;
 
 	//bi-directional many-to-one association to Booking
-	@OneToMany(mappedBy="trip")
+	@OneToMany(mappedBy="trip",cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Booking> bookings;
 
 	//bi-directional many-to-one association to Feedback
-	@OneToMany(mappedBy="trip")
+	@OneToMany(mappedBy="trip",cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Feedback> feedbacks;
 
 	//bi-directional many-to-one association to Meal
-	@OneToMany(mappedBy="trip")
+	@OneToMany(mappedBy="trip",cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Meal> meals;
 
 	//bi-directional many-to-one association to Notification
-	@OneToMany(mappedBy="trip")
+	@OneToMany(mappedBy="trip",cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Notification> notifications;
 
 	//bi-directional many-to-one association to Transport
-	@OneToMany(mappedBy="trip")
+	@OneToMany(mappedBy="trip",cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Transport> transports;
 
 	//bi-directional many-to-one association to Location
@@ -95,7 +95,7 @@ public class Trip implements Serializable {
 	private TripPlanner tripPlanner;
 
 	//bi-directional many-to-one association to TripBanner
-	@OneToMany(mappedBy="trip")
+	@OneToMany(mappedBy="trip",cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<TripBanner> tripBanners;
 
 	public Trip() {

@@ -4,34 +4,34 @@ import java.io.Serializable;
 import jakarta.persistence.*;
 import java.util.List;
 
+
 /**
  * The persistent class for the role database table.
+ * 
  */
 @Entity
-@NamedQuery(name = "Role.findAll", query = "SELECT r FROM Role r")
+@NamedQuery(name="Role.findAll", query="SELECT r FROM Role r")
 public class Role implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	private String description;
 
 	private String name;
 
-	// ✅ bi-directional many-to-one association to UserRole
-	@OneToMany(mappedBy = "role")
-	private List<UserRole> userRoles;
-
-	// ✅ NEW: bi-directional one-to-many association to Notification
-	@OneToMany(mappedBy = "receiverRole")
+	//bi-directional many-to-one association to Notification
+	@OneToMany(mappedBy="role")
 	private List<Notification> notifications;
+
+	//bi-directional many-to-one association to UserRole
+	@OneToMany(mappedBy="role")
+	private List<UserRole> userRoles;
 
 	public Role() {
 	}
-
-	// ✅ Getters and Setters
 
 	public int getId() {
 		return this.id;
@@ -57,6 +57,28 @@ public class Role implements Serializable {
 		this.name = name;
 	}
 
+	public List<Notification> getNotifications() {
+		return this.notifications;
+	}
+
+	public void setNotifications(List<Notification> notifications) {
+		this.notifications = notifications;
+	}
+
+	public Notification addNotification(Notification notification) {
+		getNotifications().add(notification);
+		notification.setRole(this);
+
+		return notification;
+	}
+
+	public Notification removeNotification(Notification notification) {
+		getNotifications().remove(notification);
+		notification.setRole(null);
+
+		return notification;
+	}
+
 	public List<UserRole> getUserRoles() {
 		return this.userRoles;
 	}
@@ -68,20 +90,15 @@ public class Role implements Serializable {
 	public UserRole addUserRole(UserRole userRole) {
 		getUserRoles().add(userRole);
 		userRole.setRole(this);
+
 		return userRole;
 	}
 
 	public UserRole removeUserRole(UserRole userRole) {
 		getUserRoles().remove(userRole);
 		userRole.setRole(null);
+
 		return userRole;
 	}
 
-	public List<Notification> getNotifications() {
-		return notifications;
-	}
-
-	public void setNotifications(List<Notification> notifications) {
-		this.notifications = notifications;
-	}
 }

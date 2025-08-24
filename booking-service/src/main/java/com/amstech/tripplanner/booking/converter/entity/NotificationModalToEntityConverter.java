@@ -35,7 +35,7 @@ public class NotificationModalToEntityConverter {
 		notification.setTitle(notificationCreateRequestModal.getTitle());
 		notification.setMessage(notificationCreateRequestModal.getMessage());
 		notification.setStatus(statusOptional.get());
-		notification.setReceiverRole(roleOptional.get());
+		notification.setRole(roleOptional.get());
 		notification.setCreatedAt(new Timestamp(new Date().getTime()));
 		
 		return notification;

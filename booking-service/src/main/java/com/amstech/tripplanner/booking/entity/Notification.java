@@ -10,114 +10,118 @@ import java.sql.Timestamp;
  * 
  */
 @Entity
-@NamedQuery(name = "Notification.findAll", query = "SELECT n FROM Notification n")
+@NamedQuery(name="Notification.findAll", query="SELECT n FROM Notification n")
 public class Notification implements Serializable {
- 	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
- 	@Id
- 	@GeneratedValue(strategy = GenerationType.IDENTITY)
- 	private int id;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private int id;
 
- 	@Column(name = "created_at")
- 	private Timestamp createdAt;
+	@Column(name="created_at")
+	private Timestamp createdAt;
 
- 	@Lob
- 	private String message;
+	@Lob
+	private String message;
 
- 	private String title;
+	private String title;
 
- 	@ManyToOne
- 	@JoinColumn(name = "status_id")
- 	private Status status;
+	//bi-directional many-to-one association to Role
+	@ManyToOne
+	@JoinColumn(name="receiver_role_id")
+	private Role role;
 
- 	@ManyToOne
- 	private Trip trip;
+	//bi-directional many-to-one association to User
+	@ManyToOne
+	@JoinColumn(name="sender_id")
+	private User sender;
 
- 	@ManyToOne
- 	@JoinColumn(name = "sender_id")
- 	private User sender;
+	//bi-directional many-to-one association to User
+	@ManyToOne
+	@JoinColumn(name="receiver_id")
+	private User receiver;
 
- 	@ManyToOne
- 	@JoinColumn(name = "receiver_id")
- 	private User receiver;
+	//bi-directional many-to-one association to Trip
+	@ManyToOne
+	private Trip trip;
 
- 	@ManyToOne
- 	@JoinColumn(name = "receiver_role_id")
- 	private Role receiverRole;
+	//bi-directional many-to-one association to Status
+	@ManyToOne
+	private Status status;
 
- 	public Notification() {}
+	public Notification() {
+	}
 
- 	// Getters & Setters
+	public int getId() {
+		return this.id;
+	}
 
- 	public int getId() {
- 		return this.id;
- 	}
+	public void setId(int id) {
+		this.id = id;
+	}
 
- 	public void setId(int id) {
- 		this.id = id;
- 	}
+	public Timestamp getCreatedAt() {
+		return this.createdAt;
+	}
 
- 	public Timestamp getCreatedAt() {
- 		return this.createdAt;
- 	}
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
+	}
 
- 	public void setCreatedAt(Timestamp createdAt) {
- 		this.createdAt = createdAt;
- 	}
+	public String getMessage() {
+		return this.message;
+	}
 
- 	public String getMessage() {
- 		return this.message;
- 	}
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
- 	public void setMessage(String message) {
- 		this.message = message;
- 	}
+	public String getTitle() {
+		return this.title;
+	}
 
- 	public String getTitle() {
- 		return this.title;
- 	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
- 	public void setTitle(String title) {
- 		this.title = title;
- 	}
+	public Role getRole() {
+		return this.role;
+	}
 
- 	public Status getStatus() {
- 		return this.status;
- 	}
+	public void setRole(Role role) {
+		this.role = role;
+	}
 
- 	public void setStatus(Status status) {
- 		this.status = status;
- 	}
+	public User getSender() {
+		return this.sender;
+	}
 
- 	public Trip getTrip() {
- 		return this.trip;
- 	}
+	public void setSender(User user1) {
+		this.sender = user1;
+	}
 
- 	public void setTrip(Trip trip) {
- 		this.trip = trip;
- 	}
+	public User getReceiver() {
+		return this.receiver;
+	}
 
- 	public User getSender() {
- 		return sender;
- 	}
+	public void setReceiver(User user2) {
+		this.receiver = user2;
+	}
 
- 	public void setSender(User sender) {
- 		this.sender = sender;
- 	}
+	public Trip getTrip() {
+		return this.trip;
+	}
 
- 	public User getReceiver() {
- 		return receiver;
- 	}
+	public void setTrip(Trip trip) {
+		this.trip = trip;
+	}
 
- 	public void setReceiver(User receiver) {
- 		this.receiver = receiver;
- 	}
+	public Status getStatus() {
+		return this.status;
+	}
 
- 	public Role getReceiverRole() {
- 		return receiverRole;
- 	}
+	public void setStatus(Status status) {
+		this.status = status;
+	}
 
- 	public void setReceiverRole(Role receiverRole) {
- 		this.receiverRole = receiverRole;
- 	}
- }
+}

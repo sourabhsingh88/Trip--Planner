@@ -1,5 +1,6 @@
 package com.amstech.tripplanner.booking.converter.modal;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import com.amstech.tripplanner.booking.entity.Location;
 import com.amstech.tripplanner.booking.entity.Meal;
 import com.amstech.tripplanner.booking.entity.Transport;
 import com.amstech.tripplanner.booking.entity.Trip;
+import com.amstech.tripplanner.booking.entity.TripBanner;
 import com.amstech.tripplanner.booking.entity.User;
 import com.amstech.tripplanner.booking.entity.UserRole;
 import com.amstech.tripplanner.booking.modal.response.AccommodationResponseModal;
@@ -21,12 +23,16 @@ import com.amstech.tripplanner.booking.modal.response.LocationWithUserResponseMo
 import com.amstech.tripplanner.booking.modal.response.MealResponseModal;
 import com.amstech.tripplanner.booking.modal.response.RoleResponseModal;
 import com.amstech.tripplanner.booking.modal.response.TransportResponseModal;
+import com.amstech.tripplanner.booking.modal.response.TripBannerResponseModal;
 import com.amstech.tripplanner.booking.modal.response.TripDetailResponseModal;
 import com.amstech.tripplanner.booking.modal.response.UserResponseModal;
 
 @Component
 public class LocationEntityToModalConverter {
 
+	private String extractFileNameOnly(String fullPath) {
+	    return new File(fullPath).getName();
+	}
 	public LocationWithUserResponseModal findUserByLocation(Location location) {
 		LocationWithUserResponseModal locationWithUserResponseModal = new LocationWithUserResponseModal();
 		locationWithUserResponseModal.setId(location.getId());
@@ -77,6 +83,7 @@ public class LocationEntityToModalConverter {
 			tripDetailResponseModal.setTo(trip.getToLocation());
 			tripDetailResponseModal.setPrice(trip.getPrice());
 			tripDetailResponseModal.setImgURL(trip.getImgUrl());
+			tripDetailResponseModal.setTripPlannerId(trip.getTripPlanner().getId());
 			tripDetailResponseModal.setTripPlannerName(trip.getTripPlanner().getUser().getName());
 			tripDetailResponseModal.setCountryName(trip.getLocation().getCity().getState().getCountry());
 			tripDetailResponseModal.setStateName(trip.getLocation().getCity().getState().getName());
@@ -135,7 +142,17 @@ public class LocationEntityToModalConverter {
 				
 				transportResponseModals.add(transportResponseModal);
 			}
-			tripDetailResponseModal.setTransportsResponseModals(transportResponseModals);;
+			tripDetailResponseModal.setTransportsResponseModals(transportResponseModals);
+			
+			List<TripBannerResponseModal> tripBannerResponseModals = new ArrayList<>();
+			for (TripBanner tripBanner : trip.getTripBanners()) {
+				TripBannerResponseModal tripBannerResponseModal = new TripBannerResponseModal();
+				tripBannerResponseModal.setId(tripBanner.getId());
+				tripBannerResponseModal.setUrl(extractFileNameOnly(tripBanner.getUrl()));
+				tripBannerResponseModals.add(tripBannerResponseModal);
+			}
+			
+			tripDetailResponseModal.setTripBannerResponseModals(tripBannerResponseModals);
 			
 			tripDetailResponseModals.add(tripDetailResponseModal);
 		}

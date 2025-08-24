@@ -13,6 +13,7 @@ import com.amstech.tripplanner.booking.entity.Location;
 import com.amstech.tripplanner.booking.entity.Role;
 import com.amstech.tripplanner.booking.entity.User;
 import com.amstech.tripplanner.booking.entity.UserRole;
+import com.amstech.tripplanner.booking.modal.request.UserFullUpdateRequestModal;
 import com.amstech.tripplanner.booking.modal.request.UserSignUpRequestModel;
 import com.amstech.tripplanner.booking.modal.request.UserUpdateEmailRequestModal;
 import com.amstech.tripplanner.booking.modal.request.UserUpdatePasswordRequestModal;
@@ -102,6 +103,38 @@ public class UserModelToEntityConverter {
 		user.setDob(updateRequestModel.getDob());
 		user.setUpdatedAt(new Date());
 		return user;
+	}
+	
+	public User fullUpdate(UserFullUpdateRequestModal userFullUpdateRequestModal) throws Exception {
+		
+		Optional<City> cityOptional = cityRepo.findById(userFullUpdateRequestModal.getCityId());
+		if(!cityOptional.isPresent()) {
+			throw new Exception("City Is not Available with id : " +userFullUpdateRequestModal.getCityId());
+		}
+		
+		Optional<User> userOptional = userRepo.findById(userFullUpdateRequestModal.getId());
+		if (!userOptional.isPresent()) {
+			throw new Exception("User Is Not Avilable with id :" + userFullUpdateRequestModal.getId());
+		}
+		User user = userOptional.get();
+		
+		if (userFullUpdateRequestModal.getProfieImage() != null) {
+		    user.setProfileImage(extractFileNameOnly(userFullUpdateRequestModal.getProfieImage()));
+		}
+		// else don't touch old image
+
+		user.setName(userFullUpdateRequestModal.getName());
+		user.setEmail(userFullUpdateRequestModal.getEmail());
+		user.setPhoneNumber(userFullUpdateRequestModal.getPhoneNumber());
+		user.setGender(userFullUpdateRequestModal.getGender());
+		user.setDob(userFullUpdateRequestModal.getDob());
+		user.setUpdatedAt(new Date());
+		Location location = user.getLocation();
+		location.setName(userFullUpdateRequestModal.getLocationName());
+		location.setCity(cityOptional.get());
+		
+		return user;
+
 	}
 	
 	public User updateEmail(UserUpdateEmailRequestModal userUpdateEmailRequestModal) throws Exception {

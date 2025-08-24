@@ -120,7 +120,7 @@ public class NotificationService {
 
 	}
 
-	public List<NotificationResponseModal> findAllForReciver(Integer receiverId, Integer page, Integer size)
+	public List<NotificationResponseModal> findAllForReciver(Integer receiverId,Integer receiverRoleId, Integer page, Integer size)
 			throws Exception {
 
 		Optional<User> receiverOptional = userRepo.findById(receiverId);
@@ -128,7 +128,7 @@ public class NotificationService {
 			throw new Exception("User Is no Available with id  : " + receiverId);
 		}
 
-		List<Notification> notifications = notificationRepo.findAllByReceiverId(receiverId, unReadId,
+		List<Notification> notifications = notificationRepo.findAllByReceiverId(receiverId, unReadId,receiverRoleId,
 				PageRequest.of(page, size));
 		if (notifications.isEmpty()) {
 			throw new Exception("Not Notification Exist for user with id : " + receiverId);
@@ -140,8 +140,8 @@ public class NotificationService {
 
 	}
 
-	public long countAllForReciver(Integer receiverId) throws Exception {
-		return notificationRepo.countAllByReceiverId(receiverId, unReadId);
+	public long countAllForReciver(Integer receiverId,Integer receiverRoleId) throws Exception {
+		return notificationRepo.countAllByReceiverId(receiverId, unReadId,receiverRoleId);
 	}
 
 }

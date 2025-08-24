@@ -60,12 +60,12 @@ public class NotificationController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/byreceiver", produces = "application/json")
-	public RestResponse findAllByReceiver(@RequestParam("receiverId") Integer receiverId,Integer page, Integer size) {
+	public RestResponse findAllByReceiver(@RequestParam("receiverId") Integer receiverId,@RequestParam("receiverRoleId") Integer receiverRoleId,Integer page, Integer size) {
 
 		LOGGER.info("Fetching Notification for User with id : {} ", receiverId);
 		try {
-			List<NotificationResponseModal> notificationResponseModals = notificationService.findAllForReciver(receiverId, page, size);
-			long totalRecords = notificationService.countAllForReciver(receiverId);
+			List<NotificationResponseModal> notificationResponseModals = notificationService.findAllForReciver(receiverId,receiverRoleId, page, size);
+			long totalRecords = notificationService.countAllForReciver(receiverId,receiverRoleId);
 			return RestResponse.build().withSuccess("").withTotalRecords(totalRecords).withPageNumber(page).withPageSize(size).withData(notificationResponseModals);
 		} catch (Exception e) {
 			LOGGER.error("failed to  Fetch Notification for User with id : {}", e.getMessage(), e);

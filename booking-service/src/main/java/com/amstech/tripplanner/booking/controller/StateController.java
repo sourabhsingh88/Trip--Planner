@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.amstech.tripplanner.booking.modal.response.StateResponseModal;
+import com.amstech.tripplanner.booking.response.RestResponse;
 import com.amstech.tripplanner.booking.service.StateService;
 
 @RestController
@@ -27,16 +28,16 @@ public class StateController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value ="/all",produces = "application/json")
-	public ResponseEntity<Object> findAll(){
+	public RestResponse findAll(){
 		
 		LOGGER.info("Fetching All States ");
 		try {
 			List<StateResponseModal> stateResponseModals = stateService.findAll();
-			return new ResponseEntity<Object>(stateResponseModals,HttpStatus.OK);
+			return RestResponse.build().withSuccess("All State Founds").withData(stateResponseModals);
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOGGER.error("Failed to find States due to : {}", e.getMessage(), e);
-			return new ResponseEntity<Object>("Failed to find States  due to : " + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+			LOGGER.error("Failed to find States due to : {}", e.getMessage());
+			return RestResponse.build().withError("ailed to find States  due to" + e.getMessage());
 		}
 	}
 
