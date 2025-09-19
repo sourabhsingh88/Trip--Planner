@@ -22,6 +22,7 @@ public class StateService {
 	private StateRepo stateRepo;
 	@Autowired
 	private StateEntityToModalConverter stateEntityToModalConverter;
+	@Autowired
 	
 	public StateService() {
 		LOGGER.debug("StateService : Object Created");

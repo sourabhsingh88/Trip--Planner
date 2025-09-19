@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amstech.tripplanner.booking.modal.response.CityResponseModal;
-
+import com.amstech.tripplanner.booking.response.RestResponse;
 import com.amstech.tripplanner.booking.service.CityService;
 @RestController
 @RequestMapping("city")
@@ -28,16 +28,16 @@ public class CityController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value ="/all",produces = "application/json")
-	public ResponseEntity<Object> findAll(@RequestParam("stateId") Integer stateId){
+	public RestResponse findAll(@RequestParam("stateId") Integer stateId){
 		
 		LOGGER.info("Fetching All City with stateId  : " + stateId );
 		try {
 			List<CityResponseModal> cityResponseModals = cityService.findAllByStateId(stateId);
-			return new ResponseEntity<Object>(cityResponseModals,HttpStatus.OK);
+			return RestResponse.build().withSuccess("All City Founds").withData(cityResponseModals);
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOGGER.error("Failed to find City due to : {}", e.getMessage(), e);
-			return new ResponseEntity<Object>("Failed to find City  due to : " + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+			LOGGER.error("Failed to find City due to : {}", e.getMessage());
+			return RestResponse.build().withError("Failed to find City  due to" + e.getMessage());
 		}
 	}
 	

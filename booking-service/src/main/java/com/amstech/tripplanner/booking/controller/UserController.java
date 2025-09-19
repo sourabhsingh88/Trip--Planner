@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amstech.tripplanner.booking.modal.request.UserUpdateEmailRequestModal;
+import com.amstech.tripplanner.booking.modal.request.UserFullUpdateRequestModal;
 import com.amstech.tripplanner.booking.modal.request.UserLoginRequestModal;
 import com.amstech.tripplanner.booking.modal.request.UserSignUpRequestModel;
 import com.amstech.tripplanner.booking.modal.request.UserUpdatePasswordRequestModal;
@@ -87,6 +88,39 @@ public class UserController {
 			FileUtils.delete(new File(filePath));
 			LOGGER.error("Failed to save user due to : {}", e.getMessage(), e);
 			return RestResponse.build().withError("Failed to save user due to : " + e.getMessage());
+		}
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value = "/fullUpdate", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json")
+	public RestResponse fullUpdate(
+			@RequestParam(value ="userRequestModalJson",required = true) String userRequestModalJson,
+			@RequestParam(value ="profilePhoto",required = false) MultipartFile profilePhoto) throws IOException {
+		String filePath = null;
+ 
+		try {
+
+			UserFullUpdateRequestModal userFullUpdateRequestModal = objectMapper.readValue(userRequestModalJson,UserFullUpdateRequestModal.class);
+			LOGGER.info("Start Updateing User Account with email : {} ", userFullUpdateRequestModal.getEmail());
+			
+			if(profilePhoto != null) {
+				LOGGER.info("File Name : "+ profilePhoto.getOriginalFilename() + " and Size : " + profilePhoto.getSize() );
+				
+				if(profilePhoto.getSize() > fileService.getFileMaxSize()) {
+					throw new Exception(" File Size Can Not Greater Than : " + fileService.getFileMaxSize() + " bytes");
+				}
+				
+				filePath = fileService.saveFile(profilePhoto.getBytes(),"user",FilenameUtils.getExtension(profilePhoto.getOriginalFilename()));
+			}
+			
+			userFullUpdateRequestModal.setProfieImage(filePath);
+			
+			UserResponseModal userResponseModal = userservice.fullUpdate(userFullUpdateRequestModal);
+			LOGGER.info("User Response Modal Reseived");
+			return RestResponse.build().withSuccess("User Account Updated Successfully", userResponseModal);
+		} catch (Exception e) {
+			FileUtils.delete(new File(filePath));
+			LOGGER.error("Failed to Update user due to : {}", e.getMessage(), e);
+			return RestResponse.build().withError("Failed to Update user due to : " + e.getMessage());
 		}
 	}
 

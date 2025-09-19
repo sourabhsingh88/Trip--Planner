@@ -29,6 +29,13 @@ public class UserEntityToModalConverter {
 		userResponseModal.setPhoneNumber(user.getPhoneNumber());
 		userResponseModal.setIsDeleted(user.getIsDeleted());
 		userResponseModal.setProfileImage(extractFileNameOnly(user.getProfileImage()));
+		userResponseModal.setLocationId(user.getLocation().getId());
+		userResponseModal.setLocationName(user.getLocation().getName());
+		userResponseModal.setCityId(user.getLocation().getCity().getId());
+		userResponseModal.setCityName(user.getLocation().getCity().getName());
+		userResponseModal.setSateId(user.getLocation().getCity().getState().getId());
+		userResponseModal.setStateName(user.getLocation().getCity().getState().getName());
+		
 		
 		List<RoleResponseModal> roleResponseModals = new ArrayList<>();
 		for (UserRole userRole : user.getUserRoles()) {

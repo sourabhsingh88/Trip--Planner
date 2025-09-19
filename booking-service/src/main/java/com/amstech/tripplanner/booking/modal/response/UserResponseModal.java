@@ -14,6 +14,12 @@ public class UserResponseModal {
 	private Date dob;
 	private String profileImage;
 	private int isDeleted;
+	private int locationId;
+	private String LocationName;
+	private int cityId;
+	private String cityName;
+	private int sateId;
+	private String stateName;
 	private List<RoleResponseModal> roles;
 
 }

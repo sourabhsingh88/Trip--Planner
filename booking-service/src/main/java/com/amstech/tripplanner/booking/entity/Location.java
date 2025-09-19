@@ -29,7 +29,7 @@ public class Location implements Serializable {
 	private City city;
 
 	//bi-directional many-to-one association to Trip
-	@OneToMany(mappedBy="location")
+	@OneToMany(mappedBy="location", cascade = CascadeType.ALL)
 	private List<Trip> trips;
 
 	//bi-directional many-to-one association to User

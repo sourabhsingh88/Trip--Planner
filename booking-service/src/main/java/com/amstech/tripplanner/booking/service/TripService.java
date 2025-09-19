@@ -27,7 +27,7 @@ import com.amstech.tripplanner.booking.repo.custom.TripCustomRepo;
 import com.amstech.tripplanner.booking.repo.custom.UserCustomRepo;
 
 @Service
-public class TripService {  
+public class TripService {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(TripService.class);
 
@@ -41,9 +41,9 @@ public class TripService {
 	private TripEntityToModalConverter tripEntityToModalConverter;
 	@Autowired
 	private TripModalToEntityConverter tripModalToEntityConverter;
-	@Autowired 
+	@Autowired
 	private LocationEntityToModalConverter locationEntityToModalConverter;
-	
+
 	@Autowired
 	@Qualifier("tripCustomImplRepo")
 	private TripCustomRepo tripCustomRepo;
@@ -58,11 +58,11 @@ public class TripService {
 	public LocationWithTripResponseModal create(TripCreateRequestModal tripCreateRequestModal) throws Exception {
 		Location tripCreatewithLocation = tripModalToEntityConverter.tripCreate(tripCreateRequestModal);
 		Location saveLocationWithTrip = locationRepo.save(tripCreatewithLocation);
-		return  locationEntityToModalConverter.findTripByLocation(saveLocationWithTrip);
+		return locationEntityToModalConverter.findTripByLocation(saveLocationWithTrip);
 	}
-	
+
 	public List<TripResponseModal> findAllContinue(Integer page, Integer size) throws Exception {
-		List<Trip> trips = tripRepo.findAllByContinueStatusId(continueStatusId,PageRequest.of(page, size));
+		List<Trip> trips = tripRepo.findAllByContinueStatusId(continueStatusId, PageRequest.of(page, size));
 		if (trips.isEmpty()) {
 			throw new Exception("No trip Available");
 		}
@@ -70,8 +70,41 @@ public class TripService {
 		return tripResponseModals;
 
 	}
+
 	public long countAllContinue() {
 		return tripRepo.countAllByContinueStatusId(continueStatusId);
+	}
+
+	public List<TripResponseModal> findAllContinueByTripplanner(Integer tripplannerId, Integer page, Integer size)
+			throws Exception {
+		List<Trip> trips = tripRepo.findAllByContinueStatusIdAndTripplannerId(continueStatusId, tripplannerId,
+				PageRequest.of(page, size));
+		if (trips.isEmpty()) {
+			throw new Exception("No trip Available");
+		}
+		List<TripResponseModal> tripResponseModals = tripEntityToModalConverter.findAll(trips);
+		return tripResponseModals;
+
+	}
+
+	public long countAllContinueByTripplanner(Integer tripplannerId) {
+		return tripRepo.countAllByContinueStatusIdAndTripplannerId(continueStatusId, tripplannerId);
+	}
+
+	public List<TripResponseModal> findAllDiscontinueByTripplanner(Integer tripplannerId, Integer page, Integer size)
+			throws Exception {
+		List<Trip> trips = tripRepo.findAllByDiscontinueStatusIdAndTripplannerId(disContinueStatusId, tripplannerId,
+				PageRequest.of(page, size));
+		if (trips.isEmpty()) {
+			throw new Exception("No trip Available");
+		}
+		List<TripResponseModal> tripResponseModals = tripEntityToModalConverter.findAll(trips);
+		return tripResponseModals;
+
+	}
+
+	public long countAllDiscontinueByTripplanner(Integer tripplannerId) {
+		return tripRepo.countAllByDiscontinueStatusIdAndTripplannerId(disContinueStatusId, tripplannerId);
 	}
 
 	public TripDetailResponseModal findById(Integer id) throws Exception {
@@ -80,18 +113,14 @@ public class TripService {
 			throw new Exception("No trip Available with id : " + id);
 		}
 		Trip trip = tripOptional.get();
-		if (trip.getStatus().getId() != continueStatusId) {
-			throw new Exception("That Trip is Not Continue in Current Time where thrip id : " + id);
-		}
-
 		TripDetailResponseModal tripDetailResponseModal = tripEntityToModalConverter.findById(trip);
 		return tripDetailResponseModal;
 
 	}
 
-	public List<TripResponseModal> findByName(String name,Integer page, Integer size) throws Exception {
-		
-		List<Trip> trips = tripRepo.searchBy(name, continueStatusId,PageRequest.of(page, size));
+	public List<TripResponseModal> findByName(String name, Integer page, Integer size) throws Exception {
+
+		List<Trip> trips = tripRepo.searchBy(name, continueStatusId, PageRequest.of(page, size));
 
 		if (trips.isEmpty()) {
 			throw new Exception("user does not exist");
@@ -100,43 +129,44 @@ public class TripService {
 		return tripResponseModals;
 
 	}
+
 	public long countByName(String name) {
 		return tripRepo.countSearchBy(name, continueStatusId);
 	}
-	
-	
+
 	public TripDetailResponseModal toggleTripStatus(Integer tripId) throws Exception {
 		Optional<Trip> tripOptional = tripRepo.findById(tripId);
-		
-		if(!tripOptional.isPresent()) {
+
+		if (!tripOptional.isPresent()) {
 			throw new Exception("That trip is Not Available with id " + tripId);
 		}
-			Trip trip = tripOptional.get();
-			Integer currentStatusId = trip.getStatus().getId();
+		Trip trip = tripOptional.get();
+		Integer currentStatusId = trip.getStatus().getId();
 
-			// Toggle status: If 1 (continue), change to 0 (discontinue), else change to 1
-			// (continue)
-			Integer newStatusId = (currentStatusId == 9) ? 10 : 9;
+		// Toggle status: If 1 (continue), change to 0 (discontinue), else change to 1
+		// (continue)
+		Integer newStatusId = (currentStatusId == 9) ? 10 : 9;
 
-			// Fetch the new status from the Status table
-			Optional<Status> statusOptional = statusRepo.findById(newStatusId);
-			if (!statusOptional.isPresent()) {
-				throw new Exception("That tripStaus is Not Available in Your Database with id " + newStatusId);
-			} 
-			trip.setStatus(statusOptional.get());
-			
-			Trip updateTrip = tripRepo.save(trip);
-			return tripEntityToModalConverter.findById(updateTrip);
-		} 
-	
-	public List<TripResponseModal> filterBy(Integer page, Integer size, String to, String from, Integer duration, Integer price,  String keyword) throws Exception{
-		List<Trip> trips = tripCustomRepo.filterBy(page, size, to, from, duration, price, keyword);
+		// Fetch the new status from the Status table
+		Optional<Status> statusOptional = statusRepo.findById(newStatusId);
+		if (!statusOptional.isPresent()) {
+			throw new Exception("That tripStaus is Not Available in Your Database with id " + newStatusId);
+		}
+		trip.setStatus(statusOptional.get());
+
+		Trip updateTrip = tripRepo.save(trip);
+		return tripEntityToModalConverter.findById(updateTrip);
+	}
+
+	public List<TripResponseModal> filterBy(Integer page, Integer size, String to, String from, Integer startDuration,
+			Integer endDuration, Integer startPrice, Integer endPrice, String keyword) throws Exception {
+		List<Trip> trips = tripCustomRepo.filterBy(page, size, to, from, startDuration, endDuration, startPrice,
+				endPrice, keyword);
 		return tripEntityToModalConverter.findAll(trips);
 	}
-	
-	public long countBy( String to, String from, Integer duration, Integer price,  String keyword) throws Exception {
-		return tripCustomRepo.countBy(to, from, duration, price, keyword);
-	}
-	}
 
-
+	public long countBy(String to, String from, Integer startDuration, Integer endDuration, Integer startPrice,
+			Integer endPrice, String keyword) throws Exception {
+		return tripCustomRepo.countBy(to, from, startDuration, endDuration, startPrice, endPrice, keyword);
+	}
+}

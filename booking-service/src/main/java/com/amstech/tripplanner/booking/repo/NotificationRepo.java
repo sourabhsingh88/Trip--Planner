@@ -20,11 +20,11 @@ public interface NotificationRepo extends JpaRepository<Notification, Integer> {
 	);
 
 	
-	@Query("select n from Notification n where n.receiver.id =:receiverId and n.status.id =:unRead")
-	List<Notification> findAllByReceiverId( @Param("receiverId") int receiverId,@Param("unRead") int unRead,Pageable pageable);
+	@Query("select n from Notification n where n.receiver.id =:receiverId and n.status.id =:unRead and n.role.id =:receiverRoleId")
+	List<Notification> findAllByReceiverId( @Param("receiverId") int receiverId,@Param("unRead") int unRead,@Param("receiverRoleId") int receiverRoleId,Pageable pageable);
 	
-	@Query("select count(n) from Notification n where n.receiver.id =:receiverId and n.status.id =:unRead")
-	long countAllByReceiverId( @Param("receiverId") int receiverId,@Param("unRead") int unRead);
+	@Query("select count(n) from Notification n where n.receiver.id =:receiverId and n.status.id =:unRead and n.role.id =:receiverRoleId")
+	long countAllByReceiverId( @Param("receiverId") int receiverId,@Param("unRead") int unRead,@Param("receiverRoleId") int receiverRoleId);
 	
 
 }
