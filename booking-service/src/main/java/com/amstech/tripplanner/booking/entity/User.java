@@ -48,23 +48,23 @@ public class User implements Serializable {
 	private Date updatedAt;
 
 	//bi-directional many-to-one association to Booking
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="user",cascade = CascadeType.ALL,orphanRemoval = true)
 	private List<Booking> bookings;
 
 	//bi-directional many-to-one association to Feedback
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="user",cascade = CascadeType.ALL,orphanRemoval = true)
 	private List<Feedback> feedbacks;
 
 	//bi-directional many-to-one association to Notification
-	@OneToMany(mappedBy="sender")
+	@OneToMany(mappedBy="sender",cascade = CascadeType.ALL,orphanRemoval = true)
 	private List<Notification> notifications1;
 
 	//bi-directional many-to-one association to Notification
-	@OneToMany(mappedBy="receiver")
+	@OneToMany(mappedBy="receiver",cascade = CascadeType.ALL,orphanRemoval = true)
 	private List<Notification> notifications2;
 
 	//bi-directional many-to-one association to TripPlanner
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="user",cascade = CascadeType.ALL,orphanRemoval = true)
 	private List<TripPlanner> tripPlanners;
 
 	//bi-directional many-to-one association to Location
@@ -72,7 +72,7 @@ public class User implements Serializable {
 	private Location location;
 
 	//bi-directional many-to-one association to UserRole
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="user",cascade = CascadeType.ALL,orphanRemoval = true)
 	private List<UserRole> userRoles;
 
 	public User() {
