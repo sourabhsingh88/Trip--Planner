@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,7 +25,6 @@ import com.amstech.tripplanner.booking.service.FileService;
 import com.amstech.tripplanner.booking.service.AboutUsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
 @RestController
 @RequestMapping("aboutUs")
 public class AboutUsController {
@@ -38,11 +38,9 @@ public class AboutUsController {
 	
 	
 	private final Logger LOGGER = LoggerFactory.getLogger(AboutUsController.class);
-
 	@RequestMapping(method = RequestMethod.POST, value = "/multiPartSave", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json")
 	public RestResponse multiPartSave(@RequestParam("aboutUsRequestModalJson") String aboutUsRequestModalJson,@RequestParam("banner") MultipartFile banner) throws IOException {
 		String filePath = null;
- 
 		try {
 
 			AboutUsSaveRequestModal aboutUsSaveRequestModal = objectMapper.readValue(aboutUsRequestModalJson,AboutUsSaveRequestModal.class);
